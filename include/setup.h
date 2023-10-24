@@ -37,8 +37,8 @@
 #define SPEED 200
 // Servo Motors
 // TO DO: Update servo pins
-#define SERVO_GRAB 9997
-#define SERVO_LIFT 9996
+#define SERVO_GRAB_PIN 9997
+#define SERVO_LIFT_PIN 9996
 int servo_g_pos = 0;
 int servo_l_pos = 0;
 
@@ -59,13 +59,27 @@ NewPing sonarPLL(TRIG_PIN_PLL, ECHO_PIN_PLL, MAX_DISTANCE);
 Stepper xStep(STEPS_PER_REVOLUTION, X_STEP_IN1, X_STEP_IN2, X_STEP_IN3, X_STEP_IN4);
 Stepper zStep(STEPS_PER_REVOLUTION, Z_STEP_IN1, Z_STEP_IN2, Z_STEP_IN3, Z_STEP_IN4);
 
-
+// Initialize Servos
+Servo gServo;
+Servo lServo;
 
 void setup() {
     Serial.begin(9600);
     // Buttons
     btnList.begin();
-    pinMode(Y_DC_IN1)
+    // DC Motor
+    pinMode(Y_DC_IN1);
+    pinMode(Y_DC_IN2);
+    pinMode(Y_DC_EN);
+    digitalWrite(Y_DC_IN1, LOW);
+    digitalWrite(Y_DC_IN2, LOW);
+    digitalWrite(Y_DC_EN, LOW);
+    // Steppers
+    xStep.setSpeed(SPEED);
+    zStep.setSpeed(SPEED);
+    // Servos
+    gServo.attach(SERVO_GRAB_PIN);
+    lServo.attach(SERVO_LIFT_PIN);
 }
 
 #endif //SETUP_H
