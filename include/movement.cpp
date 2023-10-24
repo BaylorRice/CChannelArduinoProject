@@ -38,3 +38,30 @@ const double Location::getZPos() {
 const double Location::getZRot() {
     return zRot;
 }
+
+void Location::moveX(double xIn) {
+    double currentX = getXPos();
+    double newX = currentX + xIn;
+}
+
+void Location::moveY(double yIn) {
+    double currentY = getYPos();
+    double newY = currentY + yIn;
+}
+
+void Location::moveZ(double zIn) {
+    double currentZ = getZPos();
+    double newZ = currentZ + zIn;
+}
+
+void Location::rotateZ(double zRotIn) {
+    double currentZrot = getZRot();
+    double newZrot = currentZrot + zRotIn;
+    if (newZrot > 360) {
+        newZrot = 360 - newZrot;
+    }
+    if (newZrot < 0) {
+        newZrot = 360 + newZrot;
+    }
+    
+}
