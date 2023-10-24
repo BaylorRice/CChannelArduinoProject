@@ -56,6 +56,7 @@ void Location::moveYfor(double time, int speed, int dir) {
 
     // Start Motor with speed and direction
     if (dir > 0) {
+        // Move Towards PLL
         analogWrite(Y_DC_EN, speed);
         digitalWrite(Y_DC_IN1, HIGH);
         digitalWrite(Y_DC_IN2, LOW);
@@ -64,6 +65,7 @@ void Location::moveYfor(double time, int speed, int dir) {
         digitalWrite(Y_DC_IN2, LOW);
     } 
     else {
+        // Move Away from PLL
 
     }
     
