@@ -1,4 +1,5 @@
 #include "movement.h"
+#include <Arduino.h>
 
 Location::Location(double xIn, double yIn, double zIn, double zRotIn) {
     xPos = xIn;
@@ -44,9 +45,8 @@ void Location::moveX(double xIn) {
     double newX = currentX + xIn;
 }
 
-void Location::moveY(double yIn) {
-    double currentY = getYPos();
-    double newY = currentY + yIn;
+void Location::moveYfor(double time) {
+    delay(time);
 }
 
 void Location::moveZ(double zIn) {
@@ -63,5 +63,5 @@ void Location::rotateZ(double zRotIn) {
     if (newZrot < 0) {
         newZrot = 360 + newZrot;
     }
-    
+
 }
