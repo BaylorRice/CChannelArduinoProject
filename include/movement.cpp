@@ -60,12 +60,16 @@ void Location::moveYfor(double time, int speed, int dir) {
 
     // Start Motor with speed and direction
     if (dir > 0) {
+        // Move Towards PLL
         digitalWrite(Y_DC_IN1, HIGH);
         digitalWrite(Y_DC_IN2, LOW);
     } 
     else {
+        // Move away from PLL
         digitalWrite(Y_DC_IN1, LOW);
         digitalWrite(Y_DC_IN2, HIGH);
+        
+
     }
     
     // Wait <time> milliseconds
