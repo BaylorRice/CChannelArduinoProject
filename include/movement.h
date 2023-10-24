@@ -13,7 +13,7 @@ class location {
     void setZPos(double zIn);
     void setZRot(double zRotIn);
 
-    
+
     public:
     location(double xIn = 0, double yIn = 0, double zIn = 0, double zRotIn = 0);
 
