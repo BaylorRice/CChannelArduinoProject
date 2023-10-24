@@ -9,8 +9,17 @@ class location {
     double zRot;
 
     public:
-    location(double xIn, double yIn, double zIn, double zRotIn);
+    location(double xIn = 0, double yIn = 0, double zIn = 0, double zRotIn = 0);
     
+    void setXPos(double xIn);
+    void setYPos(double yIn);
+    void setZPos(double zIn);
+    void setZRot(double zRotIn);
+
+    const double getXPos();
+    const double getYPos();
+    const double getZPos();
+    const double getZRot();
 };
 
 #endif //MOVEMENT_H
