@@ -80,9 +80,9 @@ void setup() {
     // Buttons
     btnList.begin();
     // DC Motor
-    pinMode(Y_DC_IN1);
-    pinMode(Y_DC_IN2);
-    pinMode(Y_DC_EN);
+    pinMode(Y_DC_IN1, OUTPUT);
+    pinMode(Y_DC_IN2, OUTPUT);
+    pinMode(Y_DC_EN, OUTPUT);
     digitalWrite(Y_DC_IN1, LOW);
     digitalWrite(Y_DC_IN2, LOW);
     digitalWrite(Y_DC_EN, LOW);
