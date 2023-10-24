@@ -1,5 +1,5 @@
 #include "movement.h"
 
-void location::setXPos(double xIn) {
+void Location::setXPos(double xIn) {
     xPos = xIn;
 }
