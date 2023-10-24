@@ -22,7 +22,7 @@ class Location {
     const double getZRot();
 
     void moveX(double xIn);
-    void moveYfor(double time);
+    void moveYfor(double time, int speed);
     void moveZ(double zIn);
     void rotateZ(double zRotIn);
 };

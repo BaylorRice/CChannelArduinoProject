@@ -45,7 +45,8 @@ void Location::moveX(double xIn) {
     double newX = currentX + xIn;
 }
 
-void Location::moveYfor(double time) {
+void Location::moveYfor(double time, int speed) {
+    
     delay(time);
 }
 
