@@ -7,7 +7,18 @@ Location::Location(double xIn, double yIn, double zIn, double zRotIn) {
     zRot = zRotIn;
 }
 
-void Location::setXPos(double xIn)
-{
+void Location::setXPos(double xIn) {
     xPos = xIn;
+}
+
+void Location::setYPos(double yIn) {
+    yPos = yIn;
+}
+
+void Location::setZPos(double zIn) {
+    zPos = zIn;
+}
+
+void Location::setZRot(double zRotIn) {
+    zRot = zRotIn;
 }
