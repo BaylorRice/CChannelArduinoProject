@@ -1,5 +1,5 @@
-#define SETUP_H
 #ifndef SETUP_H
+#define SETUP_H
 
 #include <AbleButtons.h>
 #include <NewPing.h>
