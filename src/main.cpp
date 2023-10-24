@@ -1,5 +1,6 @@
 #include <Arduino.h>
 #include "setup.h"
+#include "movement.h"
 
 // put function declarations here:
 int myFunction(int, int);
