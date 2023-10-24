@@ -48,8 +48,14 @@ void Location::moveX(double xIn) {
 void Location::moveYfor(double time, int speed) {
     // Start Motor with speed and direction
     if (speed < 0) {
-
-    } else {
+        analogWrite(Y_DC_EN, speed);
+        digitalWrite(Y_DC_IN1, HIGH);
+        digitalWrite(Y_DC_IN2, LOW);
+        delay(time);
+        digitalWrite(Y_DC_IN1, LOW);
+        digitalWrite(Y_DC_IN2, LOW);
+    } 
+    else {
 
     }
     
