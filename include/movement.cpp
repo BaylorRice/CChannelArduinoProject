@@ -43,6 +43,8 @@ const double Location::getZRot() {
 void Location::moveX(double xIn) {
     double currentX = getXPos();
     double newX = currentX + xIn;
+    // TO DO: Adjust value for more precise x movement
+    xStep.step(STEPS_PER_REVOLUTION);
 }
 
 void Location::moveYfor(double time, int speed, int dir) {
@@ -54,29 +56,31 @@ void Location::moveYfor(double time, int speed, int dir) {
         speed = 255;
     }
 
+    analogWrite(Y_DC_EN, speed);
+
     // Start Motor with speed and direction
     if (dir > 0) {
-        analogWrite(Y_DC_EN, speed);
         digitalWrite(Y_DC_IN1, HIGH);
-        digitalWrite(Y_DC_IN2, LOW);
-        delay(time);
-        digitalWrite(Y_DC_IN1, LOW);
         digitalWrite(Y_DC_IN2, LOW);
     } 
     else {
-
+        digitalWrite(Y_DC_IN1, LOW);
+        digitalWrite(Y_DC_IN2, HIGH);
     }
     
     // Wait <time> milliseconds
     delay(time);
 
     // Stop Motor
+    digitalWrite(Y_DC_IN1, LOW);
+    digitalWrite(Y_DC_IN2, LOW);
 
 }
 
 void Location::moveZ(double zIn) {
     double currentZ = getZPos();
     double newZ = currentZ + zIn;
+
 }
 
 void Location::rotateZ(double zRotIn) {

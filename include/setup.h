@@ -73,7 +73,7 @@ Stepper zStep(STEPS_PER_REVOLUTION, Z_STEP_IN1, Z_STEP_IN2, Z_STEP_IN3, Z_STEP_I
 
 // Servo setup
 Servo gServo;
-Servo lServo;
+Servo zServo;
 
 void setup() {
     Serial.begin(9600);
@@ -91,7 +91,7 @@ void setup() {
     zStep.setSpeed(SPEED);
     // Servos
     gServo.attach(SERVO_GRAB_PIN);
-    lServo.attach(SERVO_LIFT_PIN);
+    zServo.attach(SERVO_LIFT_PIN);
 }
 
 #endif //SETUP_H
