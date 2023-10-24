@@ -45,9 +45,17 @@ void Location::moveX(double xIn) {
     double newX = currentX + xIn;
 }
 
-void Location::moveYfor(double time, int speed) {
-    // Start Motor with speed and direction
+void Location::moveYfor(double time, int speed, int dir) {
+    // Speed Check
     if (speed < 0) {
+        speed = -speed;
+    }
+    if (speed > 255) {
+        speed = 255;
+    }
+
+    // Start Motor with speed and direction
+    if (dir > 0) {
         analogWrite(Y_DC_EN, speed);
         digitalWrite(Y_DC_IN1, HIGH);
         digitalWrite(Y_DC_IN2, LOW);
