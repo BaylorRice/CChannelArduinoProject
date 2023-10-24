@@ -1,5 +1,5 @@
-#define MOVEMENT_H
 #ifndef MOVEMENT_H
+#define MOVEMENT_H
 
 class Location {
     private:
@@ -9,7 +9,7 @@ class Location {
     double zRot;
 
     public:
-    location(double xIn = 0, double yIn = 0, double zIn = 0, double zRotIn = 0);
+    Location(double xIn = 0, double yIn = 0, double zIn = 0, double zRotIn = 0);
 
     void setXPos(double xIn);
     void setYPos(double yIn);
