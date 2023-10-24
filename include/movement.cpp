@@ -44,7 +44,7 @@ void Location::moveX(double xIn) {
     double currentX = getXPos();
     double newX = currentX + xIn;
     // TO DO: Adjust value for more precise x movement
-    xStep.step(STEPS_PER_REVOLUTION);
+    xStep.step(/*NUMBER OF STEPS*/);
 }
 
 void Location::moveYfor(double time, int speed, int dir) {
@@ -98,6 +98,6 @@ void Location::rotateZ(double zRotIn) {
         newZrot = 360 + newZrot;
     }
     // TO DO: Adjust value for more precise z-rotation movement
-    zStep.step(STEPS_PER_REVOLUTION);
+    zStep.step(/*NUMBER OF STEPS*/);
 
 }
