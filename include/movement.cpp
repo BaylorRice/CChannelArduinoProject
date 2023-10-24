@@ -85,7 +85,7 @@ void Location::moveZ(double zIn) {
     double currentZ = getZPos();
     double newZ = currentZ + zIn;
     // TO DO: Adjust value for more precise z-lift movement
-    zServo.write(newZ);
+    zServo.write(newZ /*Maybe change to be an encoded number*/);
 }
 
 void Location::rotateZ(double zRotIn) {
