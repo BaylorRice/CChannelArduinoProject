@@ -84,7 +84,8 @@ void Location::moveYfor(double time, int speed, int dir) {
 void Location::moveZ(double zIn) {
     double currentZ = getZPos();
     double newZ = currentZ + zIn;
-
+    // TO DO: Adjust value for more precise z-lift movement
+    zServo.write(newZ);
 }
 
 void Location::rotateZ(double zRotIn) {
@@ -96,5 +97,7 @@ void Location::rotateZ(double zRotIn) {
     if (newZrot < 0) {
         newZrot = 360 + newZrot;
     }
+    // TO DO: Adjust value for more precise z-rotation movement
+    zStep.step(STEPS_PER_REVOLUTION);
 
 }
