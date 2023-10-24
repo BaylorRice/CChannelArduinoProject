@@ -1,21 +1,20 @@
-#define MOVEMENT_H
 #ifndef MOVEMENT_H
+#define MOVEMENT_H
 
-class location {
+class Location {
     private:
     double xPos;
     double yPos;
     double zPos;
     double zRot;
 
+    public:
+    Location(double xIn = 0, double yIn = 0, double zIn = 0, double zRotIn = 0);
+
     void setXPos(double xIn);
     void setYPos(double yIn);
     void setZPos(double zIn);
     void setZRot(double zRotIn);
-
-    
-    public:
-    location(double xIn = 0, double yIn = 0, double zIn = 0, double zRotIn = 0);
 
     const double getXPos();
     const double getYPos();
