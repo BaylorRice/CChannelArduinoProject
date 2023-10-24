@@ -46,8 +46,18 @@ void Location::moveX(double xIn) {
 }
 
 void Location::moveYfor(double time, int speed) {
+    // Start Motor with speed and direction
+    if (speed < 0) {
+
+    } else {
+
+    }
     
+    // Wait <time> milliseconds
     delay(time);
+
+    // Stop Motor
+
 }
 
 void Location::moveZ(double zIn) {
