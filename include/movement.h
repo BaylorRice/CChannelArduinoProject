@@ -1,6 +1,8 @@
 #ifndef MOVEMENT_H
 #define MOVEMENT_H
 
+#include "setup.h"
+
 class Location {
     private:
     double xPos;
