@@ -38,7 +38,7 @@
 #define Z_STEP_IN3 34
 #define Z_STEP_IN4 32
 // STEPPER CONFIG
-#define MILL_PER STEP 0.19
+#define MILL_PER_STEP 0.19
 #define DEG_PER_STEP 1.8 
 #define STEPS_PER_REVOLUTION 200
 #define SPEED 200
