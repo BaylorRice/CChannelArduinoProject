@@ -106,7 +106,12 @@ void Location::rotateZ(double zRotIn) {
 
 }
 
-void Claw::setGrab(bool grabIn) {
+Claw::Claw(bool grabIn) {
+    grabbed = grabIn;
+}
+
+void Claw::setGrab(bool grabIn)
+{
     grabbed = grabIn;
 }
 
