@@ -15,8 +15,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7f2e6e6b-fd94-4b4a-bc07-2ff5aa07e2e8" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/include/detect.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/include/detect.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/detect.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/include/detect.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/detect.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/detect.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -66,13 +67,13 @@
     "cf.advertisement.text.has.clang-format": "true",
     "cf.first.check.clang-format": "false",
     "cidr.known.project.marker": "true",
-    "git-widget-placeholder": "location-class",
+    "git-widget-placeholder": "detect-class",
     "last_opened_file_path": "/Users/samsimonian/Documents/CChannelArudinoProject",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
-    "settings.editor.selected.configurable": "clion.platformio.config",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>

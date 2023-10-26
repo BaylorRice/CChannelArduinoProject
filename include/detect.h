@@ -5,11 +5,23 @@
 
 class detect {
 private:
-    bool goldReady;
-    bool greenReady;
+    bool caseReady;
     bool palletReady;
-    bool green;
-    bool gold;
+    bool buttonReady;
+
+public:
+    // gets and sets
+    bool getCaseReady(void);
+    bool getPalletReady(void);
+    bool getButtonReady(void);
+    void setCaseReady(bool);
+    void setPalletReady(bool);
+    void setButtonReady(bool);
+
+    // detect functions
+    bool caseDetect();
+    bool palletDetect();
+    NewPing detectPress();
 
 };
 
