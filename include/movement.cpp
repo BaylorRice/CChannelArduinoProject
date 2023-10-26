@@ -84,6 +84,8 @@ void Location::moveYfor(int time, int speed, int dir) {
     digitalWrite(Y_DC_IN1, LOW);
     digitalWrite(Y_DC_IN2, LOW);
 
+    // TODO: Update yPos to reflect movement (may not be possible)
+
 }
 
 void Location::moveYto(bool PLL) {
@@ -117,18 +119,11 @@ void Location::moveZ(bool zIn) {
     }
 }
 
-void Location::rotateZ(double zRotIn) {
+void Location::rotateZto(double zRotIn) {
     double currentZrot = getZRot();
-    double newZrot = currentZrot + zRotIn;
-    if (newZrot > 360) {
-        newZrot = 360 - newZrot;
-    }
-    if (newZrot < 0) {
-        newZrot = 360 + newZrot;
-    }
-    // TO DO: Adjust value for more precise z-rotation movement
-    zStep.step(/*NUMBER OF STEPS*/);
-
+    double moveAngle = currentZrot - zRotIn;
+    int moveSteps = moveAngle / DEG_PER_STEP;
+    zStep.step(moveSteps);
 }
 
 Claw::Claw(bool grabIn) {
