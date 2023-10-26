@@ -1,10 +1,10 @@
 #include "movement.h"
 #include <Arduino.h>
 
-Location::Location(double xIn, double yIn, double zIn, double zRotIn) {
+Location::Location(double xIn, double yIn, bool zIn, double zRotIn) {
     xPos = xIn;
     yPos = yIn;
-    zPos = zIn;
+    zUp = zIn;
     zRot = zRotIn;
 }
 
@@ -16,8 +16,8 @@ void Location::setYPos(double yIn) {
     yPos = yIn;
 }
 
-void Location::setZPos(double zIn) {
-    zPos = zIn;
+void Location::setZUp(bool zIn) {
+    zUp = zIn;
 }
 
 void Location::setZRot(double zRotIn) {
@@ -32,8 +32,8 @@ double Location::getYPos() {
     return yPos;
 }
 
-double Location::getZPos() {
-    return zPos;
+bool Location::getZUp() {
+    return zUp;
 }
 
 double Location::getZRot() {
@@ -104,11 +104,13 @@ void Location::moveYto(bool PLL) {
     }
 }
 
-void Location::moveZ(double zIn) {
-    double currentZ = getZPos();
-    double newZ = currentZ + zIn;
-    // TO DO: Adjust value for more precise z-lift movement
-    zServo.write(newZ /*Maybe change to be an encoded number*/);
+void Location::moveZ(bool zIn) {
+    // TODO Update degree values
+    if (getZUp()) {
+        zServo.write(0);
+    } else {
+        zServo.write(180);
+    }
 }
 
 void Location::rotateZ(double zRotIn) {

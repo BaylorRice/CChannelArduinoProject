@@ -7,26 +7,26 @@ class Location {
     private:
     double xPos;
     double yPos;
-    double zPos;
+    bool zUp;
     double zRot;
 
     public:
-    Location(double xIn = 0, double yIn = 0, double zIn = 0, double zRotIn = 0);
+    Location(double xIn = 0, double yIn = 0, bool zIn = false, double zRotIn = 0);
 
     void setXPos(double xIn);
     void setYPos(double yIn);
-    void setZPos(double zIn);
+    void setZUp(bool zIn);
     void setZRot(double zRotIn);
 
     double getXPos();
     double getYPos();
-    double getZPos();
+    bool getZUp();
     double getZRot();
 
     void moveX(double xIn);
     void moveYfor(int time, int speed, int dir);
     void moveYto(bool PLL);
-    void moveZ(double zIn);
+    void moveZ(bool zIn);
     void rotateZ(double zRotIn);
 };
 
