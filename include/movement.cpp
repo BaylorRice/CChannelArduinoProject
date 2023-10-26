@@ -47,7 +47,7 @@ void Location::moveX(double xIn) {
     xStep.step(/*NUMBER OF STEPS*/);
 }
 
-void Location::moveYfor(double time, int speed, int dir) {
+void Location::moveYfor(int time, int speed, int dir) {
     // Speed Check
     if (speed < 0) {
         speed = -speed;
@@ -68,12 +68,16 @@ void Location::moveYfor(double time, int speed, int dir) {
         // Move away from PLL
         digitalWrite(Y_DC_IN1, LOW);
         digitalWrite(Y_DC_IN2, HIGH);
-        
-
     }
     
-    // Wait <time> milliseconds
-    delay(time);
+    // Wait <time> milliseconds (with limit switch bump stopping)
+    for (int i = 0; i < time; i++) {
+        delay(1);
+        if (digitalRead(LIMIT_SWITCH_1_PIN) || digitalRead(LIMIT_SWITCH_2_PIN)) {
+            break;
+        }
+    }
+    
 
     // Stop Motor
     digitalWrite(Y_DC_IN1, LOW);
