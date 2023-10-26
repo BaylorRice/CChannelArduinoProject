@@ -10,6 +10,12 @@ private:
     bool buttonReady = false;
 
 public:
+    // default constructor
+    detect() {
+        caseReady = false;
+        palletReady = false;
+        buttonReady = false;
+    }
     // gets and sets
     bool getCaseReady(void);
     bool getPalletReady(void);
