@@ -25,9 +25,9 @@ public:
     void setButtonReady(bool);
 
     // detect functions
-    bool caseDetect();
-    bool palletDetect();
-    NewPing detectPress();
+    void caseDetect(NewPing);
+    void palletDetect();
+    NewPing detectPress(ButtonList*);
 
 };
 

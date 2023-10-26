@@ -48,17 +48,18 @@ void detect::palletDetect() {
     }
 }
 
-NewPing detect::detectPress(Button *buttons) {
-    Button btn;
-    NewPing selection;
+NewPing detect::detectPress(ButtonList btnList[]) {
+    NewPing selection(0,0,0);
     while (buttonReady) {
-        if (buttons[0].resetClicked()) {
+        if (btnList[0].resetClicked()) {
             selection = sonarGreen;
             setButtonReady(false);
+            Serial.println("Green\n");
         }
-        if (buttons[1].resetClicked()) {
+        if (btnList[1].resetClicked()) {
             selection = sonarGold;
             setButtonReady(false);
+            Serial.println("Gold\n");
         }
     }
     return selection;

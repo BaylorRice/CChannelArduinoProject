@@ -9,8 +9,8 @@
 //Define component pins
 // Buttons
 // TO DO: Update Button pins
-#define GREEN_START_BTN_PIN 9999
-#define GOLD_START_BTN_PIN 9998
+#define GREEN_START_BTN_PIN A0
+#define GOLD_START_BTN_PIN A1
 
 // Ultrasonic Sensors
 #define TRIG_PIN_GREEN 52
