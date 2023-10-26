@@ -73,7 +73,7 @@ void Location::moveYfor(int time, int speed, int dir) {
     // Wait <time> milliseconds (with limit switch bump stopping)
     for (int i = 0; i < time; i++) {
         delay(1);
-        if (digitalRead(LIMIT_SWITCH_1_PIN) || digitalRead(LIMIT_SWITCH_2_PIN)) {
+        if (digitalRead(LIMIT_SWITCH_1_PIN) == HIGH|| digitalRead(LIMIT_SWITCH_2_PIN) == HIGH) {
             break;
         }
     }
