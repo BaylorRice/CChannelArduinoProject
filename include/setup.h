@@ -93,7 +93,9 @@ void setup() {
     zStep.setSpeed(SPEED);
     // Servos
     gServo.attach(SERVO_GRAB_PIN);
+    gServo.write(0);
     zServo.attach(SERVO_LIFT_PIN);
+    zServo.write(0);
 }
 
 #endif //SETUP_H
