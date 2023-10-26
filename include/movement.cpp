@@ -101,3 +101,23 @@ void Location::rotateZ(double zRotIn) {
     zStep.step(/*NUMBER OF STEPS*/);
 
 }
+
+void Claw::setGrab(bool grabIn) {
+    grabbed = grabIn;
+}
+
+bool Claw::getGrab() {
+    return grabbed;
+}
+
+void Claw::open() {
+    if (getGrab() == true) {
+        // SERVO -> OPEN
+    }
+}
+
+void Claw::close() {
+    if (getGrab() == false) {
+        // SERVO -> CLOSE
+    }
+}
