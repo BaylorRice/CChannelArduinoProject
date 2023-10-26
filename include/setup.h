@@ -38,7 +38,7 @@
 #define Z_STEP_IN3 34
 #define Z_STEP_IN4 32
 // STEPPER CONFIG
-#define STEP_PER_MIL 5.26
+#define MIL_PER_STEP 0.19
 #define DEG_PER_STEP 1.8 
 #define STEPS_PER_REVOLUTION 200
 #define SPEED 200
@@ -53,8 +53,8 @@ int servo_l_pos = 0;
 
 // Limit Switchs
 // TO DO: Update limit switch pins
-#define LIMIT_SWITCH_1_PIN // Add Value
-#define LIMIT_SWITCH_2_PIN // Add Value
+#define LIMIT_SWITCH_CASE_PIN // Add Value
+#define LIMIT_SWITCH_PLL_PIN // Add Value
 
 // Button setup
 using Button = AblePulldownCallbackClickerButton;

@@ -74,7 +74,7 @@ void Location::moveYfor(int time, int speed, int dir) {
     // Wait <time> milliseconds (with limit switch bump stopping)
     for (int i = 0; i < time; i++) {
         delay(1);
-        if (digitalRead(LIMIT_SWITCH_1_PIN) == HIGH|| digitalRead(LIMIT_SWITCH_2_PIN) == HIGH) {
+        if (digitalRead(LIMIT_SWITCH_PLL_PIN) == HIGH|| digitalRead(LIMIT_SWITCH_CASE_PIN) == HIGH) {
             break;
         }
     }
@@ -84,6 +84,24 @@ void Location::moveYfor(int time, int speed, int dir) {
     digitalWrite(Y_DC_IN1, LOW);
     digitalWrite(Y_DC_IN2, LOW);
 
+}
+
+void Location::moveYto(bool PLL) {
+    if (PLL) {
+        // TODO: Refine this
+
+        // Move Towards PLL
+        digitalWrite(Y_DC_IN1, HIGH);
+        digitalWrite(Y_DC_IN2, LOW);
+
+        while (digitalRead(LIMIT_SWITCH_PLL_PIN) == LOW) {
+            delay(1);
+        }
+
+        // Stop Motor
+        digitalWrite(Y_DC_IN1, LOW);
+        digitalWrite(Y_DC_IN2, LOW);
+    }
 }
 
 void Location::moveZ(double zIn) {

@@ -25,6 +25,7 @@ class Location {
 
     void moveX(double xIn);
     void moveYfor(int time, int speed, int dir);
+    void moveYto(bool PLL);
     void moveZ(double zIn);
     void rotateZ(double zRotIn);
 };
