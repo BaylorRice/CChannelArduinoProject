@@ -5,9 +5,9 @@
 
 class detect {
 private:
-    bool caseReady;
-    bool palletReady;
-    bool buttonReady;
+    bool caseReady = false;
+    bool palletReady = false;
+    bool buttonReady = false;
 
 public:
     // gets and sets

@@ -38,6 +38,7 @@ void palletDetect() {
     int time, distance;
     time = sonarPLL.ping_median(NUM_PINGS);
     distance = sonarPLL.convert_cm(time);
+    // FIXME need correct distance range
     if (distance < 10 && distance > 5) {
         setPalletReady(true);
     }
@@ -49,11 +50,15 @@ void palletDetect() {
 NewPing detectPress(Button *buttons) {
     Button btn;
     NewPing selection;
-    if (buttons[0].resetClicked()) {
-        selection = sonarGreen;
-    }
-    if (buttons[1].resetClicked()) {
-        selection = sonarGold;
+    while (buttonReady) {
+        if (buttons[0].resetClicked()) {
+            selection = sonarGreen;
+            setButtonReady(false);
+        }
+        if (buttons[1].resetClicked()) {
+            selection = sonarGold;
+            setButtonReady(false);
+        }
     }
     return selection;
 }
