@@ -24,19 +24,19 @@ void Location::setZRot(double zRotIn) {
     zRot = zRotIn;
 }
 
-const double Location::getXPos() {
+double Location::getXPos() {
     return xPos;
 }
 
-const double Location::getYPos() {
+double Location::getYPos() {
     return yPos;
 }
 
-const double Location::getZPos() {
+double Location::getZPos() {
     return zPos;
 }
 
-const double Location::getZRot() {
+double Location::getZRot() {
     return zRot;
 }
 

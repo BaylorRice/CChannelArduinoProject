@@ -18,15 +18,29 @@ class Location {
     void setZPos(double zIn);
     void setZRot(double zRotIn);
 
-    const double getXPos();
-    const double getYPos();
-    const double getZPos();
-    const double getZRot();
+    double getXPos();
+    double getYPos();
+    double getZPos();
+    double getZRot();
 
     void moveX(double xIn);
     void moveYfor(double time, int speed, int dir);
     void moveZ(double zIn);
     void rotateZ(double zRotIn);
+};
+
+class Claw {
+    private:
+    bool grabbed = false;
+
+    public:
+    Claw(bool grabIn = false);
+
+    void setGrab(bool grabIn);
+    bool getGrab();
+
+    void open();
+    void close();
 };
 
 #endif //MOVEMENT_H
