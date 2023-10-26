@@ -43,8 +43,9 @@ double Location::getZRot() {
 void Location::moveX(double xIn) {
     double currentX = getXPos();
     double newX = currentX + xIn;
-    // TO DO: Adjust value for more precise x movement
-    xStep.step(/*NUMBER OF STEPS*/);
+    double distanceMoved = newX - currentX;
+    int stepsToMove = distanceMoved / MIL_PER_STEP;
+    xStep.step(stepsToMove);
 }
 
 void Location::moveYfor(int time, int speed, int dir) {
