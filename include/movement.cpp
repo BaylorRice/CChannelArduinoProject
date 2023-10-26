@@ -106,10 +106,14 @@ void Location::moveYto(bool PLL) {
 
 void Location::moveZ(bool zIn) {
     // TODO Update degree values
-    if (getZUp()) {
+    if (!getZUp() && (zIn == true)) {
+        // Servo to UP / TRUE
         zServo.write(0);
-    } else {
+        setZUp(true);
+    } else if (getZUp() && (zIn == false)){
+        // Servo to DOWN / FALSE
         zServo.write(180);
+        setZUp(false);
     }
 }
 
