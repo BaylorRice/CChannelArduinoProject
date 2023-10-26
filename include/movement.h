@@ -27,7 +27,7 @@ class Location {
     void moveYfor(int time, int speed, int dir);
     void moveYto(bool PLL);
     void moveZ(bool zIn);
-    void rotateZ(double zRotIn);
+    void rotateZto(double zRotIn);
 };
 
 class Claw {
