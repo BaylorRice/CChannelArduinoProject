@@ -33,6 +33,8 @@ void detect::caseDetect(NewPing selection) {
     else {
         setCaseReady(false);
     }
+    Serial.print(distance);
+    delay(2000);
 }
 
 void detect::palletDetect() {
