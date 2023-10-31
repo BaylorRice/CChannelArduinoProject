@@ -25,16 +25,22 @@ void detect::setButtonReady(bool data) {
 // detect functions
 void detect::caseDetect(NewPing selection) {
     int time, distance;
+    
     time = selection.ping_median(NUM_PINGS);
     distance = selection.convert_cm(time);
+
     if (distance < 5) {
         setCaseReady(true);
+        Serial.print("case ready");
     }
     else {
         setCaseReady(false);
+        Serial.print("not case ready");
     }
+    Serial.print("\nDistance: ");
     Serial.print(distance);
-    delay(2000);
+
+    
 }
 
 void detect::palletDetect() {
@@ -50,18 +56,20 @@ void detect::palletDetect() {
     }
 }
 
-NewPing detect::detectPress(ButtonList btnList[]) {
+NewPing detect::detectPress(bool data) {
     NewPing selection(0,0,0);
-    while (buttonReady) {
-        if (btnList[0].resetClicked()) {
+
+    while (data) {
+        Serial.print("...");
+        if (greenStart.resetClicked()) {
+            Serial.println("Green\n");
             selection = sonarGreen;
             setButtonReady(false);
-            Serial.println("Green\n");
         }
-        if (btnList[1].resetClicked()) {
+        if (goldStart.resetClicked()) {
+            Serial.println("Gold\n");
             selection = sonarGold;
             setButtonReady(false);
-            Serial.println("Gold\n");
         }
     }
     return selection;

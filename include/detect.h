@@ -27,7 +27,7 @@ public:
     // detect functions
     void caseDetect(NewPing);
     void palletDetect();
-    NewPing detectPress(ButtonList*);
+    NewPing detectPress(bool);
 
 };
 

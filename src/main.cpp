@@ -1,14 +1,29 @@
 #include <Arduino.h>
-#include "detect.cpp"
+#include "detect.h"
 
 void loop() {
   // put your main code here, to run repeatedly:
+  btnList.handle();
   detect data;
-  NewPing test(23,22,200);
+  NewPing selection(0,0,0);
+  bool i = true;
+
   Serial.println("Start");
+  
+  while (i) {
+    if(greenStart.resetClicked()) {
+      Serial.print("Green\n");
+      i = false;
+    }
+    if (goldStart.resetClicked()) {
+      Serial.print("Gold\n");
+      i = false;
+    }
+
+  }
   delay(1000);
-  data.caseDetect(test);
-  Serial.print(data.getCaseReady());
+  
+  
 
   Serial.println("\nStop");
   delay(1000);
