@@ -126,13 +126,24 @@ void Location::rotateZto(double zRotIn) {
     zStep.step(moveSteps);
 }
 
-Claw::Claw(bool grabIn) {
+Claw::Claw(bool grabIn = false, int angleIn = 0) {
     grabbed = grabIn;
+    angle = angleIn;
 }
 
 void Claw::setGrab(bool grabIn)
 {
     grabbed = grabIn;
+}
+
+void Claw::setAngle(int angleIn)
+{
+    angle = angleIn;
+}
+
+int Claw::getAngle()
+{
+    return angle;
 }
 
 bool Claw::getGrab() {
@@ -141,12 +152,20 @@ bool Claw::getGrab() {
 
 void Claw::open() {
     if (getGrab() == true) {
-        // SERVO -> OPEN
+        for (int pos = SERVO_GRAB_CLOSED_DEG; pos >= SERVO_GRAB_OPEN_DEG; pos--) {
+            servo->write(pos);
+            delay(15);
+        }
+        setGrab(false);
     }
 }
 
 void Claw::close() {
     if (getGrab() == false) {
-        // SERVO -> CLOSE
+        for (int pos = SERVO_GRAB_OPEN_DEG; pos >= SERVO_GRAB_CLOSED_DEG; pos++) {
+            servo->write(pos);
+            delay(15);
+        }
+        setGrab(true);
     }
 }

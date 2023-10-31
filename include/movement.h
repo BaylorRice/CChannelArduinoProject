@@ -34,12 +34,15 @@ class Claw {
     private:
     bool grabbed;
     int angle;
+    Servo* servo = &gServo;
+
+    void setGrab(bool grabIn);
+    void setAngle(int angleIn);
+    bool getGrab();
+    int getAngle();
 
     public:
     Claw(bool grabIn = false, int angleIn = 0);
-
-    void setGrab(bool grabIn);
-    bool getGrab();
 
     void open();
     void close();
