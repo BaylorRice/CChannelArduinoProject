@@ -1,5 +1,6 @@
 #include "detect.h"
 
+detect Detect detect();
 // gets and sets
 bool getCaseReady(void) {
     return caseReady;
