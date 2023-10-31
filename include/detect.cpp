@@ -2,28 +2,29 @@
 
 detect Detect detect();
 // gets and sets
-bool getCaseReady(void) {
+
+bool detect::getCaseReady(void) {
     return caseReady;
 }
-bool getPalletReady(void) {
+bool detect::getPalletReady(void) {
     return palletReady;
 }
-bool getButtonReady(void) {
+bool detect::getButtonReady(void) {
     return buttonReady;
 }
 
-void setCaseReady(bool sensorData) {
+void detect::setCaseReady(bool sensorData) {
     caseReady = sensorData;
 }
-void setPalletReady(bool sensorData) {
+void detect::setPalletReady(bool sensorData) {
     palletReady = sensorData;
 }
-void setButtonReady(bool data) {
+void detect::setButtonReady(bool data) {
     buttonReady = data;
 }
 
 // detect functions
-void caseDetect(NewPing selection) {
+void detect::caseDetect(NewPing selection) {
     int time, distance;
     time = selection.ping_median(NUM_PINGS);
     distance = selection.convert_cm(time);
@@ -33,9 +34,11 @@ void caseDetect(NewPing selection) {
     else {
         setCaseReady(false);
     }
+    Serial.print(distance);
+    delay(2000);
 }
 
-void palletDetect() {
+void detect::palletDetect() {
     int time, distance;
     time = sonarPLL.ping_median(NUM_PINGS);
     distance = sonarPLL.convert_cm(time);
@@ -48,17 +51,18 @@ void palletDetect() {
     }
 }
 
-NewPing detectPress(Button *buttons) {
-    Button btn;
-    NewPing selection;
+NewPing detect::detectPress(ButtonList btnList[]) {
+    NewPing selection(0,0,0);
     while (buttonReady) {
-        if (buttons[0].resetClicked()) {
+        if (btnList[0].resetClicked()) {
             selection = sonarGreen;
             setButtonReady(false);
+            Serial.println("Green\n");
         }
-        if (buttons[1].resetClicked()) {
+        if (btnList[1].resetClicked()) {
             selection = sonarGold;
             setButtonReady(false);
+            Serial.println("Gold\n");
         }
     }
     return selection;

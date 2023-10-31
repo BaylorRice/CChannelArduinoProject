@@ -9,8 +9,8 @@
 //Define component pins
 // Buttons
 // TO DO: Update Button pins
-#define GREEN_START_BTN_PIN 9999
-#define GOLD_START_BTN_PIN 9998
+#define GREEN_START_BTN_PIN A0
+#define GOLD_START_BTN_PIN A1
 
 // Ultrasonic Sensors
 #define TRIG_PIN_GREEN 52
@@ -47,7 +47,7 @@
 #define SERVO_LIFT_PIN 9996
 // SERVO CONFIG
 int servo_g_pos = 0;
-int servo_l_pos = 0;
+int servo_z_pos = 0;
 
 // Limit Switchs
 // TO DO: Update limit switch pins
@@ -92,6 +92,8 @@ void setup() {
     // Servos
     gServo.attach(SERVO_GRAB_PIN);
     zServo.attach(SERVO_LIFT_PIN);
+    gServo.write(servo_g_pos);
+    zServo.write(servo_z_pos);
 }
 
 #endif //SETUP_H
