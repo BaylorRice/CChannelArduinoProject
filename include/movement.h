@@ -32,10 +32,11 @@ class Location {
 
 class Claw {
     private:
-    bool grabbed = false;
+    bool grabbed;
+    int angle;
 
     public:
-    Claw(bool grabIn = false);
+    Claw(bool grabIn = false, int angleIn = 0);
 
     void setGrab(bool grabIn);
     bool getGrab();

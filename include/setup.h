@@ -48,8 +48,11 @@
 #define SERVO_GRAB_PIN 9997
 #define SERVO_LIFT_PIN 9996
 // SERVO CONFIG
-int servo_g_pos = 0;
-int servo_z_pos = 0;
+int SERVO_GRAB_MIN = 0;
+int SERVO_LIFT_MIN = 0;
+
+int SERVO_GRAB_MAX = 100;
+int SERVO_LEFT_MAX = 180;
 
 // Limit Switchs
 // TO DO: Update limit switch pins
