@@ -13,8 +13,8 @@
 /// Define component pins
 // Buttons
 // TO DO: Update Button pins
-const int GREEN_START_BTN_PIN = 52;
-const int GOLD_START_BTN_PIN = 53;
+const int GREEN_START_BTN_PIN = 6;
+const int GOLD_START_BTN_PIN = 5;
 
 // Ultrasonic Sensors
 const int TRIG_PIN_GREEN = 52;
@@ -67,8 +67,6 @@ using Button = AblePulldownCallbackClickerButton;
 using ButtonList = AblePulldownCallbackClickerButtonList;
 Button greenStart(GREEN_START_BTN_PIN);
 Button goldStart(GOLD_START_BTN_PIN);
-Button *btns[] = {&greenStart, &goldStart};
-ButtonList btnList(btns);
 
 // Sensor Setup
 NewPing sonarGreen(TRIG_PIN_GREEN, ECHO_PIN_GREEN, MAX_DISTANCE);
@@ -316,7 +314,8 @@ class detect {
 void setup() {
   Serial.begin(9600);
   // Buttons
-  btnList.begin();
+  greenStart.begin();
+  goldStart.begin();
   // DC Motor
   pinMode(Y_DC_IN1, OUTPUT);
   pinMode(Y_DC_IN2, OUTPUT);
@@ -341,6 +340,28 @@ Claw claw;
 /// Main.cpp
 void loop() {
   // Looping Code goes here
+  //Loop Code from Button Testing
+// put your main code here, to run repeatedly:
+    greenStart.handle();
+    goldStart.handle();
+    //detect data;
+    //NewPing selection(0, 0, 0);
+    bool i = true;
+    Serial.print("Start\n");
+
+    while (i) {
+        if (greenStart.resetClicked()) {
+            Serial.print("Green\n");
+            i = false;
+        }
+        if (goldStart.resetClicked()) {
+            Serial.print("Gold\n");
+            i = false;
+        }
+
+    }
+    delay(1000);
+
 }
 
 
