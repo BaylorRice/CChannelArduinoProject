@@ -54,7 +54,7 @@ const int SERVO_GRAB_PIN = 9;
 const int SERVO_LIFT_PIN = 9996;
 // SERVO CONFIG
 int SERVO_GRAB_CLOSED_DEG = 180;
-int SERVO_GRAB_OPEN_DEG = 0;  // Open must be smaller then closed
+int SERVO_GRAB_OPEN_DEG = 50;  // Open deg must be smaller than closed deg
 int SERVO_LIFT_MIN = 0;
 int SERVO_LEFT_MAX = 180;
 
@@ -335,14 +335,13 @@ void setup() {
   // zServo.write(SERVO_LIFT_MIN);
 }
 
+// Other Class Definitions
+Location loc;
 Claw claw;
 
 /// Main.cpp
 void loop() {
-  claw.open();
-  delay(500);
-  claw.close();
-  delay(500);
+  // Looping Code goes here
 }
 
 /*
