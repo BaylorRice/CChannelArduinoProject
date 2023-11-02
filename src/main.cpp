@@ -94,7 +94,7 @@ class Location {
   double zRot;
 
  public:
-  Location(double xIn, double yIn, bool zIn, double zRotIn) {
+  Location(double xIn = 0, double yIn = 0, bool zIn = false, double zRotIn = 0) {
     xPos = xIn;
     yPos = yIn;
     zUp = zIn;
@@ -347,30 +347,25 @@ void loop() {
 //Loop Code from Button Testing
 
 // put your main code here, to run repeatedly:
-void main() {
-    btnList.handle();
-    detect data;
-    NewPing selection(0, 0, 0);
-    bool i = true;
-
-    Serial.println("Start");
-
-    while (i) {
-        if (greenStart.resetClicked()) {
-            Serial.print("Green\n");
-            i = false;
-        }
-        if (goldStart.resetClicked()) {
-            Serial.print("Gold\n");
-            i = false;
-        }
-
-    }
-    delay(1000);
-}
-
-
-
-  Serial.println("\nStop");
-  delay(1000);
-
+//void test() {
+//    btnList.handle();
+//    detect data;
+//    NewPing selection(0, 0, 0);
+//    bool i = true;
+//
+//    Serial.println("Start");
+//
+//    while (i) {
+//        if (greenStart.resetClicked()) {
+//            Serial.print("Green\n");
+//            i = false;
+//        }
+//        if (goldStart.resetClicked()) {
+//            Serial.print("Gold\n");
+//            i = false;
+//        }
+//
+//    }
+//    delay(1000);
+//}
+//
