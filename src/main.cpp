@@ -49,6 +49,11 @@ const int STEPS_PER_REVOLUTION = 200;
 const int SPEED = 200;
 enum possibleXPos {GREEN_POS, GOLD_POS, MIDDLE_POS};
 
+// Realspace Locations
+const double GREEN_CASE_XPOS = 9999; // CHANGE
+const double GOLD_CASE_XPOS = 9999; // CHANGE
+const double CASE_YPOS = 9999; // CHANGE
+
 // Servo Motors
 // TO DO: Update servo pins
 const int SERVO_GRAB_PIN = 9;
@@ -250,7 +255,6 @@ class Detect {
   bool caseReady = false;
   bool palletReady = false;
   bool buttonReady = false;
-  possibleColors startingColor = EMPTY;
 
  public:
   // default constructor
@@ -296,19 +300,19 @@ class Detect {
       setPalletReady(false);
     }
   }
-  NewPing detectPress(bool data) {
-    NewPing selection(0, 0, 0);
+  possibleColors detectPress(bool data = true) {
+    possibleColors selection = EMPTY_COL;
 
     while (data) {
       Serial.print("...");
       if (greenStart.resetClicked()) {
         Serial.println("Green\n");
-        selection = sonarGreen;
+        selection = GREEN_COL;
         setButtonReady(false);
       }
       if (goldStart.resetClicked()) {
         Serial.println("Gold\n");
-        selection = sonarGold;
+        selection = GOLD_COL;
         setButtonReady(false);
       }
     }
@@ -345,5 +349,27 @@ Detect detection;
 
 /// Main.cpp
 void loop() {
-  // Loop - Waiting for button input -> 
+  possibleColors startingColor = EMPTY_COL;
+  NewPing *caseSonar = NULL;
+  double caseXPos = -1;
+  int fromCaseRotDeg = -1;
+  int colorCount = 0;
+
+  startingColor = detection.detectPress();
+  if (startingColor == GREEN_COL) {
+    caseSonar = &sonarGreen;
+    caseXPos = GREEN_CASE_XPOS;
+    fromCaseRotDeg = 69; // TODO Vlaue
+    colorCount = 0;
+  } else if (startingColor == GOLD_COL) {
+    caseSonar = &sonarGold;
+    caseXPos = GOLD_CASE_XPOS;
+    fromCaseRotDeg = -69; // TODO Vlaue
+    colorCount = 0;
+  } else {
+    Serial.print("ERROR: Constant Setting -> No constants set");
+    // TODO Loop Stop
+  }
+  // Wait for Detection <- *selection
+  // 
 }
