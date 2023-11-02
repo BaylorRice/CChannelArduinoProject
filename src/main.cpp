@@ -379,6 +379,7 @@ void loop() {
   loc.moveXto(caseXPos);
 
   // Wait for Case
+  detection.setCaseReady(false);
   while (!detection.getCaseReady()) {
     detection.caseDetect(caseSonarPtr);
     delay(15);
@@ -397,14 +398,20 @@ void loop() {
   loc.moveZ(true);
 
   // Move Back
-  loc.moveYfor(250, 255,
-               1);  // Move for 2.5 seconds at full speed towards the PLL
+  loc.moveYfor(250, 255, 1);
+  // Move for 2.5 seconds at full speed towards the PLL
 
   // Move to Middle
-  loc.moveX()
+  loc.moveXto(MIDDLE_XPOS);
 
-      // Rotate to PLL
-      loc.rotateZto(180);
+  // Rotate to PLL
+  loc.rotateZto(180);
+
+  // Detect PLL-readiness
+  detection.setPalletReady(false);
+  while (!detection.getPalletReady()) {
+    detection.palletDetect();
+  }
 
   // Move to PLL
   loc.moveYto(true);
