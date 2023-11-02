@@ -9,42 +9,42 @@
 //Define component pins
 // Buttons
 // TO DO: Update Button pins
-#define GREEN_START_BTN_PIN 52
-#define GOLD_START_BTN_PIN 53
+const int GREEN_START_BTN_PIN = 52;
+const int GOLD_START_BTN_PIN = 53;
 
 // Ultrasonic Sensors
-#define TRIG_PIN_GREEN 52
-#define ECHO_PIN_GREEN 53
-#define TRIG_PIN_GOLD 50
-#define ECHO_PIN_GOLD 51
-#define TRIG_PIN_PLL 48
-#define ECHO_PIN_PLL 49
+const int TRIG_PIN_GREEN = 52;
+const int ECHO_PIN_GREEN = 53;
+const int TRIG_PIN_GOLD = 50;
+const int ECHO_PIN_GOLD = 51;
+const int TRIG_PIN_PLL = 48;
+const int ECHO_PIN_PLL = 49;
 // SENSOR CONFIG
-#define MAX_DISTANCE 400
-#define NUM_PINGS 15
+const int MAX_DISTANCE = 400;
+const int NUM_PINGS = 15;
 
 // DC Motor
-#define Y_DC_IN1 22
-#define Y_DC_IN2 23
-#define Y_DC_EN 2
+const int Y_DC_IN1 = 22;
+const int Y_DC_IN2 = 23;
+const int Y_DC_EN = 2;
 
 // Stepper motors
-#define X_STEP_IN1 33
-#define X_STEP_IN2 35
-#define X_STEP_IN3 37
-#define X_STEP_IN4 39
-#define Z_STEP_IN1 38
-#define Z_STEP_IN2 36
-#define Z_STEP_IN3 34
-#define Z_STEP_IN4 32
+const int X_STEP_IN1 = 33;
+const int X_STEP_IN2 = 35;
+const int X_STEP_IN3 = 37;
+const int X_STEP_IN4 = 39;
+const int Z_STEP_IN1 = 38;
+const int Z_STEP_IN2 = 36;
+const int Z_STEP_IN3 = 34;
+const int Z_STEP_IN4 = 32;
 // STEPPER CONFIG
-#define STEPS_PER_REVOLUTION 200
-#define SPEED 200
+const int STEPS_PER_REVOLUTION = 200;
+const int SPEED = 200;
 
 // Servo Motors
 // TO DO: Update servo pins
-#define SERVO_GRAB_PIN 9997
-#define SERVO_LIFT_PIN 9996
+const int SERVO_GRAB_PIN = 9997;
+const int SERVO_LIFT_PIN = 9996;
 // SERVO CONFIG
 int SERVO_GRAB_CLOSED_DEG = 100;
 int SERVO_LIFT_MIN = 0;
@@ -54,8 +54,8 @@ int SERVO_LEFT_MAX = 180;
 
 // Limit Switchs
 // TO DO: Update limit switch pins
-#define LIMIT_SWITCH_1_PIN 9995
-#define LIMIT_SWITCH_2_PIN 9994
+const int LIMIT_SWITCH_1_PIN = 9995;
+const int LIMIT_SWITCH_2_PIN = 9994;
 
 // Button setup
 using Button = AblePulldownCallbackClickerButton;
@@ -94,9 +94,9 @@ void setup() {
     zStep.setSpeed(SPEED);
     // Servos
     gServo.attach(SERVO_GRAB_PIN);
-    gServo.write(servo_g_pos);
+    gServo.write(SERVO_GRAB_CLOSED_DEG);
     zServo.attach(SERVO_LIFT_PIN);
-    zServo.write(servo_z_pos);
+    zServo.write(SERVO_LIFT_MIN);
 }
 
 #endif //SETUP_H
