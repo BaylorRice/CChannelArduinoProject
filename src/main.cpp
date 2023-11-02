@@ -117,7 +117,9 @@ class Location {
     double distanceMoved = newX - currentX;
     int stepsToMove = distanceMoved / MIL_PER_STEP;
     xStep.step(stepsToMove);
+    setXPos(newX);
   }
+
   void moveYfor(int time, int speed, int dir) {
     // Speed Check
     if (speed < 0) {
@@ -154,6 +156,7 @@ class Location {
     digitalWrite(Y_DC_IN2, LOW);
 
     // TODO: Update yPos to reflect movement (may not be possible)
+    // setYPos(getYPos() + calculated delta)
   }
   void moveYto(bool PLL) {
     if (PLL) {
@@ -175,21 +178,18 @@ class Location {
 
   void moveZ(bool zIn) {
     // TODO Update degree values
-    if (!getZUp() && (zIn == true)) {
-      // Servo to UP / TRUE
-      zServo.write(0);
-      setZUp(true);
-    } else if (getZUp() && (zIn == false)) {
-      // Servo to DOWN / FALSE
-      zServo.write(180);
-      setZUp(false);
+    if (getZUp() != zIn) {
+        zServo.write(180 * !zIn);
+        setZUp(zIn);
     }
+
   }
   void rotateZto(double zRotIn) {
     double currentZrot = getZRot();
     double moveAngle = currentZrot - zRotIn;
     int moveSteps = moveAngle / DEG_PER_STEP;
     zStep.step(moveSteps);
+    setZRot(zRotIn);
   }
 };
 
