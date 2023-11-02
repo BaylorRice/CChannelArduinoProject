@@ -48,12 +48,12 @@ const int MIL_PER_STEP = 0.19;
 const int DEG_PER_STEP = 1.8;
 const int STEPS_PER_REVOLUTION = 200;
 const int SPEED = 200;
-enum possibleXPos { GREEN_POS, GOLD_POS, MIDDLE_POS };
 
 // Realspace Locations
 const double GREEN_CASE_XPOS = 9999;  // CHANGE
-const double GOLD_CASE_XPOS = 9999;   // CHANGE
+const double GOLD_CASE_XPOS = -9999;  // CHANGE
 const double CASE_YPOS = 9999;        // CHANGE
+const double MIDDLE_XPOS = 0;         // CHANGE
 
 // Servo Motors
 // TO DO: Update servo pins
@@ -397,16 +397,17 @@ void loop() {
   loc.moveZ(true);
 
   // Move Back
-  loc.moveYfor(250, 255, 1); // Move for 2.5 seconds at full speed towards the PLL
+  loc.moveYfor(250, 255,
+               1);  // Move for 2.5 seconds at full speed towards the PLL
 
   // Move to Middle
   loc.moveX()
 
-  // Rotate to PLL
-  loc.rotateZto(180);
+      // Rotate to PLL
+      loc.rotateZto(180);
 
   // Move to PLL
   loc.moveYto(true);
 
-  // 
+  //
 }
