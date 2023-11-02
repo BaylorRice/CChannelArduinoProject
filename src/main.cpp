@@ -357,7 +357,7 @@ void loop() {
   // Button Press -> Constants
   startingColor = detection.detectPress();
 
-  for (runCount = 0; runCount < 1; runCount++) {
+  for (runCount = 0; runCount < 2; runCount++) {
     if (startingColor == GREEN_COL) {
       caseSonarPtr = &sonarGreen;
       caseXPos = GREEN_CASE_XPOS;
