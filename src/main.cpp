@@ -384,7 +384,7 @@ void loop() {
         delay(15);
       }
 
-      // Move to Case y
+      // Move to Case in y dir
       loc.moveYto(false);
 
       // Lower to Case
