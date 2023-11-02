@@ -9,8 +9,8 @@
 //Define component pins
 // Buttons
 // TO DO: Update Button pins
-#define GREEN_START_BTN_PIN // Add Value
-#define GOLD_START_BTN_PIN // Add Value
+#define GREEN_START_BTN_PIN 52
+#define GOLD_START_BTN_PIN 53
 
 // Ultrasonic Sensors
 #define TRIG_PIN_GREEN 52
@@ -38,8 +38,6 @@
 #define Z_STEP_IN3 34
 #define Z_STEP_IN4 32
 // STEPPER CONFIG
-#define MIL_PER_STEP 0.19
-#define DEG_PER_STEP 1.8 
 #define STEPS_PER_REVOLUTION 200
 #define SPEED 200
 
@@ -56,8 +54,8 @@ int SERVO_LEFT_MAX = 180;
 
 // Limit Switchs
 // TO DO: Update limit switch pins
-#define LIMIT_SWITCH_CASE_PIN // Add Value
-#define LIMIT_SWITCH_PLL_PIN // Add Value
+#define LIMIT_SWITCH_1_PIN 9995
+#define LIMIT_SWITCH_2_PIN 9994
 
 // Button setup
 using Button = AblePulldownCallbackClickerButton;
