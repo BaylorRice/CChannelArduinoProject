@@ -1,6 +1,6 @@
 /// Constants
-#include <Arduino.h>
 #include <AbleButtons.h>
+#include <Arduino.h>
 #include <NewPing.h>
 #include <Servo.h>
 #include <Stepper.h>
@@ -44,12 +44,12 @@ const int SPEED = 200;
 
 // Servo Motors
 // TO DO: Update servo pins
-const int SERVO_GRAB_PIN = 9997;
+const int SERVO_GRAB_PIN = 9;
 const int SERVO_LIFT_PIN = 9996;
 // SERVO CONFIG
-int SERVO_GRAB_CLOSED_DEG = 100;
+int SERVO_GRAB_CLOSED_DEG = 180;
+int SERVO_GRAB_OPEN_DEG = 0;  // Open must be smaller then closed
 int SERVO_LIFT_MIN = 0;
-int SERVO_GRAB_OPEN_DEG = 10;
 int SERVO_LEFT_MAX = 180;
 
 // Limit Switchs
@@ -192,7 +192,6 @@ class Claw {
  private:
   bool grabbed;
   int angle;
-  Servo *servo = &gServo;
 
   void setGrab(bool grabIn) { grabbed = grabIn; }
   void setAngle(int angleIn) { angle = angleIn; }
@@ -200,27 +199,39 @@ class Claw {
   int getAngle() { return angle; }
 
  public:
-  Claw(bool grabIn = false, int angleIn = 0) {
+  Claw(bool grabIn = true, int angleIn = 0) {
     grabbed = grabIn;
     angle = angleIn;
   }
 
   void open() {
+    if (SERVO_GRAB_CLOSED_DEG < SERVO_GRAB_OPEN_DEG) {
+      Serial.print(
+          "ERROR: Grab Servo open()- Closed Deg must be larger than Open Deg\n");
+    }
     if (getGrab() == true) {
+    Serial.print("GrabServo - Opening\n");
       for (int pos = SERVO_GRAB_CLOSED_DEG; pos >= SERVO_GRAB_OPEN_DEG; pos--) {
-        servo->write(pos);
+        gServo.write(pos);
         delay(15);
       }
       setGrab(false);
+      Serial.print("GrabServo -> OPEN\n");
     }
   }
   void close() {
+    if (SERVO_GRAB_CLOSED_DEG < SERVO_GRAB_OPEN_DEG) {
+      Serial.print(
+          "ERROR: Grab Servo closed()- Closed Deg must be larger than Open Deg\n");
+    }
     if (getGrab() == false) {
-      for (int pos = SERVO_GRAB_OPEN_DEG; pos >= SERVO_GRAB_CLOSED_DEG; pos++) {
-        servo->write(pos);
+    Serial.print("GrabServo - Closing\n");
+      for (int pos = SERVO_GRAB_OPEN_DEG; pos <= SERVO_GRAB_CLOSED_DEG; pos++) {
+        gServo.write(pos);
         delay(15);
       }
       setGrab(true);
+      Serial.print("GrabServo -> CLOSED\n");
     }
   }
 };
@@ -309,18 +320,23 @@ void setup() {
   digitalWrite(Y_DC_IN2, LOW);
   digitalWrite(Y_DC_EN, LOW);
   // Steppers
-  xStep.setSpeed(SPEED);
-  zStep.setSpeed(SPEED);
+  // xStep.setSpeed(SPEED);
+  // zStep.setSpeed(SPEED);
   // Servos
   gServo.attach(SERVO_GRAB_PIN);
   gServo.write(SERVO_GRAB_CLOSED_DEG);
-  zServo.attach(SERVO_LIFT_PIN);
-  zServo.write(SERVO_LIFT_MIN);
+  // zServo.attach(SERVO_LIFT_PIN);
+  // zServo.write(SERVO_LIFT_MIN);
 }
+
+Claw claw;
 
 /// Main.cpp
 void loop() {
-  // put your main code here, to run repeatedly:
+  claw.open();
+  delay(500);
+  claw.close();
+  delay(500);
 }
 
 /*
