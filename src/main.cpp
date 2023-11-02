@@ -245,6 +245,77 @@ void setup() {
   zServo.write(SERVO_LIFT_MIN);
 }
 
+// Detection Classes
+class detect {
+ private:
+  bool caseReady = false;
+  bool palletReady = false;
+  bool buttonReady = false;
+
+ public:
+  // default constructor
+  detect(bool caseIn = false, bool palletIn = false, bool buttonIn = false) {
+    caseReady = caseIn;
+    palletReady = palletIn;
+    buttonReady = buttonIn;
+  }
+  
+  // gets and sets
+  bool getCaseReady(void) { return caseReady; }
+  bool getPalletReady(void) { return palletReady; }
+  bool getButtonReady(void) { return buttonReady; }
+  void setCaseReady(bool sensorData) { caseReady = sensorData; }
+  void setPalletReady(bool sensorData) { palletReady = sensorData; }
+  void setButtonReady(bool data) { buttonReady = data; }
+
+  // detect functions
+  void caseDetect(NewPing selection) {
+    int time, distance;
+
+    time = selection.ping_median(NUM_PINGS);
+    distance = selection.convert_cm(time);
+
+    if (distance < 5) {
+      setCaseReady(true);
+      Serial.print("case ready");
+    } else {
+      setCaseReady(false);
+      Serial.print("not case ready");
+    }
+    Serial.print("\nDistance: ");
+    Serial.print(distance);
+  }
+  void palletDetect() {
+    int time, distance;
+    time = sonarPLL.ping_median(NUM_PINGS);
+    distance = sonarPLL.convert_cm(time);
+    // FIXME need correct distance range
+    if (distance < 10 && distance > 5) {
+      setPalletReady(true);
+    } else {
+      setPalletReady(false);
+    }
+  }
+  NewPing detectPress(bool data) {
+    NewPing selection(0, 0, 0);
+
+    while (data) {
+      Serial.print("...");
+      if (greenStart.resetClicked()) {
+        Serial.println("Green\n");
+        selection = sonarGreen;
+        setButtonReady(false);
+      }
+      if (goldStart.resetClicked()) {
+        Serial.println("Gold\n");
+        selection = sonarGold;
+        setButtonReady(false);
+      }
+    }
+    return selection;
+  }
+};
+
 /// Main.cpp
 void loop() {
   // put your main code here, to run repeatedly:
