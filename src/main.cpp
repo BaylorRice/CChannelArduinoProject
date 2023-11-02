@@ -1,5 +1,6 @@
 // Some fun things I found while testing servos:
-// 1. If you don't newline a serial print, it makes the rest of the code not work
+// 1. If you don't newline a serial print, it makes the rest of the code not
+// work
 // 2. That's it. It should work now. Happy Coding
 // -Past Reese
 // Thank you, past Reese
@@ -47,12 +48,12 @@ const int MIL_PER_STEP = 0.19;
 const int DEG_PER_STEP = 1.8;
 const int STEPS_PER_REVOLUTION = 200;
 const int SPEED = 200;
-enum possibleXPos {GREEN_POS, GOLD_POS, MIDDLE_POS};
+enum possibleXPos { GREEN_POS, GOLD_POS, MIDDLE_POS };
 
 // Realspace Locations
-const double GREEN_CASE_XPOS = 9999; // CHANGE
-const double GOLD_CASE_XPOS = 9999; // CHANGE
-const double CASE_YPOS = 9999; // CHANGE
+const double GREEN_CASE_XPOS = 9999;  // CHANGE
+const double GOLD_CASE_XPOS = 9999;   // CHANGE
+const double CASE_YPOS = 9999;        // CHANGE
 
 // Servo Motors
 // TO DO: Update servo pins
@@ -76,7 +77,7 @@ Button greenStart(GREEN_START_BTN_PIN);
 Button goldStart(GOLD_START_BTN_PIN);
 Button *btns[] = {&greenStart, &goldStart};
 ButtonList btnList(btns);
-enum possibleColors {EMPTY_COL, GREEN_COL, GOLD_COL};
+enum possibleColors { EMPTY_COL, GREEN_COL, GOLD_COL };
 
 // Sensor Setup
 NewPing sonarGreen(TRIG_PIN_GREEN, ECHO_PIN_GREEN, MAX_DISTANCE);
@@ -220,10 +221,11 @@ class Claw {
   void open() {
     if (SERVO_GRAB_CLOSED_DEG < SERVO_GRAB_OPEN_DEG) {
       Serial.print(
-          "ERROR: Grab Servo open()- Closed Deg must be larger than Open Deg\n");
+          "ERROR: Grab Servo open()- Closed Deg must be larger than Open "
+          "Deg\n");
     }
     if (getGrab() == true) {
-    Serial.print("GrabServo - Opening\n");
+      Serial.print("GrabServo - Opening\n");
       for (int pos = SERVO_GRAB_CLOSED_DEG; pos >= SERVO_GRAB_OPEN_DEG; pos--) {
         gServo.write(pos);
         delay(15);
@@ -235,10 +237,11 @@ class Claw {
   void close() {
     if (SERVO_GRAB_CLOSED_DEG < SERVO_GRAB_OPEN_DEG) {
       Serial.print(
-          "ERROR: Grab Servo closed()- Closed Deg must be larger than Open Deg\n");
+          "ERROR: Grab Servo closed()- Closed Deg must be larger than Open "
+          "Deg\n");
     }
     if (getGrab() == false) {
-    Serial.print("GrabServo - Closing\n");
+      Serial.print("GrabServo - Closing\n");
       for (int pos = SERVO_GRAB_OPEN_DEG; pos <= SERVO_GRAB_CLOSED_DEG; pos++) {
         gServo.write(pos);
         delay(15);
@@ -273,11 +276,11 @@ class Detect {
   void setButtonReady(bool data) { buttonReady = data; }
 
   // detect functions
-  void caseDetect(NewPing selection) {
+  void caseDetect(NewPing *selection) {
     int time, distance;
 
-    time = selection.ping_median(NUM_PINGS);
-    distance = selection.convert_cm(time);
+    time = selection->ping_median(NUM_PINGS);
+    distance = selection->convert_cm(time);
 
     if (distance < 5) {
       setCaseReady(true);
@@ -302,16 +305,16 @@ class Detect {
   }
   possibleColors detectPress(bool data = true) {
     possibleColors selection = EMPTY_COL;
-
+    Serial.print("Waiting for Button...\n");
     while (data) {
-      Serial.print("...");
+      delay(5);
       if (greenStart.resetClicked()) {
-        Serial.println("Green\n");
+        Serial.print("Button Pressed - Green\n");
         selection = GREEN_COL;
         setButtonReady(false);
       }
       if (goldStart.resetClicked()) {
-        Serial.println("Gold\n");
+        Serial.print("Button Pressed - Gold\n");
         selection = GOLD_COL;
         setButtonReady(false);
       }
@@ -350,26 +353,31 @@ Detect detection;
 /// Main.cpp
 void loop() {
   possibleColors startingColor = EMPTY_COL;
-  NewPing *caseSonar = NULL;
+  NewPing *caseSonarPtr = NULL;
   double caseXPos = -1;
   int fromCaseRotDeg = -1;
   int colorCount = 0;
 
+  // Button Press -> Constants
   startingColor = detection.detectPress();
   if (startingColor == GREEN_COL) {
-    caseSonar = &sonarGreen;
+    caseSonarPtr = &sonarGreen;
     caseXPos = GREEN_CASE_XPOS;
-    fromCaseRotDeg = 69; // TODO Vlaue
+    fromCaseRotDeg = 69;  // TODO Vlaue
     colorCount = 0;
   } else if (startingColor == GOLD_COL) {
-    caseSonar = &sonarGold;
+    caseSonarPtr = &sonarGold;
     caseXPos = GOLD_CASE_XPOS;
-    fromCaseRotDeg = -69; // TODO Vlaue
+    fromCaseRotDeg = -69;  // TODO Vlaue
     colorCount = 0;
   } else {
     Serial.print("ERROR: Constant Setting -> No constants set");
     // TODO Loop Stop
   }
-  // Wait for Detection <- *selection
-  // 
+
+  // Wait for Case
+  while (!detection.getCaseReady()) {
+    detection.caseDetect(caseSonarPtr);
+    delay(15);
+  }
 }
