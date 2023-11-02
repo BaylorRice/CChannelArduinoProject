@@ -18,10 +18,10 @@ const int GREEN_START_BTN_PIN = 6;
 const int GOLD_START_BTN_PIN = 5;
 
 // Ultrasonic Sensors
-const int TRIG_PIN_GREEN = 52;
-const int ECHO_PIN_GREEN = 53;
-const int TRIG_PIN_GOLD = 50;
-const int ECHO_PIN_GOLD = 51;
+const int TRIG_PIN_GREEN = 3;
+const int ECHO_PIN_GREEN = 4;
+const int TRIG_PIN_GOLD = 8;
+const int ECHO_PIN_GOLD = 9;
 const int TRIG_PIN_PLL = 48;
 const int ECHO_PIN_PLL = 49;
 // SENSOR CONFIG
@@ -68,6 +68,8 @@ using Button = AblePulldownCallbackClickerButton;
 using ButtonList = AblePulldownCallbackClickerButtonList;
 Button greenStart(GREEN_START_BTN_PIN);
 Button goldStart(GOLD_START_BTN_PIN);
+Button *btns[] = {&greenStart, &goldStart};
+ButtonList btnList(btns);
 
 // Sensor Setup
 NewPing sonarGreen(TRIG_PIN_GREEN, ECHO_PIN_GREEN, MAX_DISTANCE);
@@ -298,7 +300,7 @@ class detect {
     NewPing selection(0, 0, 0);
 
     while (data) {
-      Serial.print("...");
+      btnList.handle();
       if (greenStart.resetClicked()) {
         Serial.println("Green\n");
         selection = sonarGreen;
@@ -318,8 +320,7 @@ class detect {
 void setup() {
   Serial.begin(9600);
   // Buttons
-  greenStart.begin();
-  goldStart.begin();
+  btnList.begin();
   // DC Motor
   pinMode(Y_DC_IN1, OUTPUT);
   pinMode(Y_DC_IN2, OUTPUT);
@@ -343,48 +344,5 @@ Claw claw;
 
 /// Main.cpp
 void loop() {
-  // detect data;
-  // NewPing selection(0, 0, 0);
-  bool actionTaken = false;
-  Serial.print("Start\n");
-
-  while (!actionTaken) {
-    greenStart.handle();
-    goldStart.handle();
-    if (greenStart.resetClicked()) {
-      Serial.print("Green\n");
-      actionTaken = true;
-    }
-    if (goldStart.resetClicked()) {
-      Serial.print("Gold\n");
-      actionTaken = true;
-    }
-    delay(15);
-  }
-  delay(1000);
+  
 }
-
-// Loop Code from Button Testing
-//  put your main code here, to run repeatedly:
-// void test() {
-//     btnList.handle();
-//     detect data;
-//     NewPing selection(0, 0, 0);
-//     bool i = true;
-//
-//     Serial.println("Start");
-//
-//     while (i) {
-//         if (greenStart.resetClicked()) {
-//             Serial.print("Green\n");
-//             i = false;
-//         }
-//         if (goldStart.resetClicked()) {
-//             Serial.print("Gold\n");
-//             i = false;
-//         }
-//
-//     }
-//     delay(1000);
-// }
-//
