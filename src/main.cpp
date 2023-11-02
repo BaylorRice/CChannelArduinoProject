@@ -375,6 +375,9 @@ void loop() {
     // TODO Loop Stop
   }
 
+  // Move to Case (x then y)
+  loc.moveXto()
+
   // Wait for Case
   while (!detection.getCaseReady()) {
     detection.caseDetect(caseSonarPtr);
