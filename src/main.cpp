@@ -1,11 +1,13 @@
+/// Constants
 #include <AbleButtons.h>
+#include <Arduino.h>
 #include <NewPing.h>
-#include <Stepper.h>
 #include <Servo.h>
+#include <Stepper.h>
 
-//Define component pins
-// Buttons
-// TO DO: Update Button pins
+// Define component pins
+//  Buttons
+//  TO DO: Update Button pins
 const int GREEN_START_BTN_PIN = 52;
 const int GOLD_START_BTN_PIN = 53;
 
@@ -68,39 +70,187 @@ NewPing sonarGold(TRIG_PIN_GOLD, ECHO_PIN_GOLD, MAX_DISTANCE);
 NewPing sonarPLL(TRIG_PIN_PLL, ECHO_PIN_PLL, MAX_DISTANCE);
 
 // Stepper setup
-Stepper xStep(STEPS_PER_REVOLUTION, X_STEP_IN1, X_STEP_IN2, X_STEP_IN3, X_STEP_IN4);
-Stepper zStep(STEPS_PER_REVOLUTION, Z_STEP_IN1, Z_STEP_IN2, Z_STEP_IN3, Z_STEP_IN4);
+Stepper xStep(STEPS_PER_REVOLUTION, X_STEP_IN1, X_STEP_IN2, X_STEP_IN3,
+              X_STEP_IN4);
+Stepper zStep(STEPS_PER_REVOLUTION, Z_STEP_IN1, Z_STEP_IN2, Z_STEP_IN3,
+              Z_STEP_IN4);
 
 // Servo setup
 Servo gServo;
 Servo zServo;
 
-void setup() {
-    Serial.begin(9600);
-    // Buttons
-    btnList.begin();
-    // DC Motor
-    pinMode(Y_DC_IN1, OUTPUT);
-    pinMode(Y_DC_IN2, OUTPUT);
-    pinMode(Y_DC_EN, OUTPUT);
+// Movement Classes
+class Location {
+ private:
+  double xPos;
+  double yPos;
+  bool zUp;
+  double zRot;
+
+ public:
+  Location(double xIn, double yIn, bool zIn, double zRotIn) {
+    xPos = xIn;
+    yPos = yIn;
+    zUp = zIn;
+    zRot = zRotIn;
+  }
+
+  void setXPos(double xIn) { xPos = xIn; }
+  void setYPos(double yIn) { yPos = yIn; }
+  void setZUp(bool zIn) { zUp = zIn; }
+  void setZRot(double zRotIn) { zRot = zRotIn; }
+
+  double getXPos() { return xPos; }
+  double getYPos() { return yPos; }
+  bool getZUp() { return zUp; }
+  double getZRot() { return zRot; }
+
+  void moveX(double xIn) {
+    double currentX = getXPos();
+    double newX = currentX + xIn;
+    double distanceMoved = newX - currentX;
+    int stepsToMove = distanceMoved / MIL_PER_STEP;
+    xStep.step(stepsToMove);
+  }
+  void moveYfor(int time, int speed, int dir) {
+    // Speed Check
+    if (speed < 0) {
+      speed = -speed;
+    }
+    if (speed > 255) {
+      speed = 255;
+    }
+
+    analogWrite(Y_DC_EN, speed);
+
+    // Start Motor with speed and direction
+    if (dir > 0) {
+      // Move Towards PLL
+      digitalWrite(Y_DC_IN1, HIGH);
+      digitalWrite(Y_DC_IN2, LOW);
+    } else {
+      // Move away from PLL
+      digitalWrite(Y_DC_IN1, LOW);
+      digitalWrite(Y_DC_IN2, HIGH);
+    }
+
+    // Wait <time> milliseconds (with limit switch bump stopping)
+    for (int i = 0; i < time; i++) {
+      delay(1);
+      if (digitalRead(LIMIT_SWITCH_PLL_PIN) == HIGH ||
+          digitalRead(LIMIT_SWITCH_CASE_PIN) == HIGH) {
+        break;
+      }
+    }
+
+    // Stop Motor
     digitalWrite(Y_DC_IN1, LOW);
     digitalWrite(Y_DC_IN2, LOW);
-    digitalWrite(Y_DC_EN, LOW);
-    // Steppers
-    xStep.setSpeed(SPEED);
-    zStep.setSpeed(SPEED);
-    // Servos
-    gServo.attach(SERVO_GRAB_PIN);
-    gServo.write(SERVO_GRAB_CLOSED_DEG);
-    zServo.attach(SERVO_LIFT_PIN);
-    zServo.write(SERVO_LIFT_MIN);
+
+    // TODO: Update yPos to reflect movement (may not be possible)
+  }
+  void moveYto(bool PLL) {
+    if (PLL) {
+      // TODO: Refine this
+
+      // Move Towards PLL
+      digitalWrite(Y_DC_IN1, HIGH);
+      digitalWrite(Y_DC_IN2, LOW);
+
+      while (digitalRead(LIMIT_SWITCH_PLL_PIN) == LOW) {
+        delay(1);
+      }
+
+      // Stop Motor
+      digitalWrite(Y_DC_IN1, LOW);
+      digitalWrite(Y_DC_IN2, LOW);
+    }
+  }
+
+  void moveZ(bool zIn) {
+    // TODO Update degree values
+    if (!getZUp() && (zIn == true)) {
+      // Servo to UP / TRUE
+      zServo.write(0);
+      setZUp(true);
+    } else if (getZUp() && (zIn == false)) {
+      // Servo to DOWN / FALSE
+      zServo.write(180);
+      setZUp(false);
+    }
+  }
+  void rotateZto(double zRotIn) {
+    double currentZrot = getZRot();
+    double moveAngle = currentZrot - zRotIn;
+    int moveSteps = moveAngle / DEG_PER_STEP;
+    zStep.step(moveSteps);
+  }
+};
+
+class Claw {
+ private:
+  bool grabbed;
+  int angle;
+  Servo *servo = &gServo;
+
+  void setGrab(bool grabIn) { grabbed = grabIn; }
+  void setAngle(int angleIn) { angle = angleIn; }
+  bool getGrab() { return grabbed; }
+  int getAngle() { return angle; }
+
+ public:
+  Claw(bool grabIn = false, int angleIn = 0) {
+    grabbed = grabIn;
+    angle = angleIn;
+  }
+
+  void open() {
+    if (getGrab() == true) {
+      for (int pos = SERVO_GRAB_CLOSED_DEG; pos >= SERVO_GRAB_OPEN_DEG; pos--) {
+        servo->write(pos);
+        delay(15);
+      }
+      setGrab(false);
+    }
+  }
+  void close() {
+    if (getGrab() == false) {
+      for (int pos = SERVO_GRAB_OPEN_DEG; pos >= SERVO_GRAB_CLOSED_DEG; pos++) {
+        servo->write(pos);
+        delay(15);
+      }
+      setGrab(true);
+    }
+  }
+};
+
+void setup() {
+  Serial.begin(9600);
+  // Buttons
+  btnList.begin();
+  // DC Motor
+  pinMode(Y_DC_IN1, OUTPUT);
+  pinMode(Y_DC_IN2, OUTPUT);
+  pinMode(Y_DC_EN, OUTPUT);
+  digitalWrite(Y_DC_IN1, LOW);
+  digitalWrite(Y_DC_IN2, LOW);
+  digitalWrite(Y_DC_EN, LOW);
+  // Steppers
+  xStep.setSpeed(SPEED);
+  zStep.setSpeed(SPEED);
+  // Servos
+  gServo.attach(SERVO_GRAB_PIN);
+  gServo.write(SERVO_GRAB_CLOSED_DEG);
+  zServo.attach(SERVO_LIFT_PIN);
+  zServo.write(SERVO_LIFT_MIN);
 }
 
+/// Main.cpp
 void loop() {
   // put your main code here, to run repeatedly:
 }
 
-/* 
+/*
 Loop Code from Button Testing
 
 // put your main code here, to run repeatedly:
@@ -110,7 +260,7 @@ Loop Code from Button Testing
   bool i = true;
 
   Serial.println("Start");
-  
+
   while (i) {
     if(greenStart.resetClicked()) {
       Serial.print("Green\n");
@@ -123,8 +273,8 @@ Loop Code from Button Testing
 
   }
   delay(1000);
-  
-  
+
+
 
   Serial.println("\nStop");
   delay(1000);
