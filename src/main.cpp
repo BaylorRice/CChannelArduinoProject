@@ -1,5 +1,6 @@
 // Some fun things I found while testing servos:
-// 1. If you don't newline a serial print, it makes the rest of the code not work
+// 1. If you don't newline a serial print, it makes the rest of the code not
+// work
 // 2. That's it. It should work now. Happy Coding
 // -Past Reese
 
@@ -92,7 +93,8 @@ class Location {
   double zRot;
 
  public:
-  Location(double xIn = 0, double yIn = 0, bool zIn = false, double zRotIn = 0) {
+  Location(double xIn = 0, double yIn = 0, bool zIn = false,
+           double zRotIn = 0) {
     xPos = xIn;
     yPos = yIn;
     zUp = zIn;
@@ -210,10 +212,11 @@ class Claw {
   void open() {
     if (SERVO_GRAB_CLOSED_DEG < SERVO_GRAB_OPEN_DEG) {
       Serial.print(
-          "ERROR: Grab Servo open()- Closed Deg must be larger than Open Deg\n");
+          "ERROR: Grab Servo open()- Closed Deg must be larger than Open "
+          "Deg\n");
     }
     if (getGrab() == true) {
-    Serial.print("GrabServo - Opening\n");
+      Serial.print("GrabServo - Opening\n");
       for (int pos = SERVO_GRAB_CLOSED_DEG; pos >= SERVO_GRAB_OPEN_DEG; pos--) {
         gServo.write(pos);
         delay(15);
@@ -225,10 +228,11 @@ class Claw {
   void close() {
     if (SERVO_GRAB_CLOSED_DEG < SERVO_GRAB_OPEN_DEG) {
       Serial.print(
-          "ERROR: Grab Servo closed()- Closed Deg must be larger than Open Deg\n");
+          "ERROR: Grab Servo closed()- Closed Deg must be larger than Open "
+          "Deg\n");
     }
     if (getGrab() == false) {
-    Serial.print("GrabServo - Closing\n");
+      Serial.print("GrabServo - Closing\n");
       for (int pos = SERVO_GRAB_OPEN_DEG; pos <= SERVO_GRAB_CLOSED_DEG; pos++) {
         gServo.write(pos);
         delay(15);
@@ -339,53 +343,48 @@ Claw claw;
 
 /// Main.cpp
 void loop() {
-  // Looping Code goes here
-  //Loop Code from Button Testing
-// put your main code here, to run repeatedly:
+  // detect data;
+  // NewPing selection(0, 0, 0);
+  bool actionTaken = false;
+  Serial.print("Start\n");
+
+  while (!actionTaken) {
     greenStart.handle();
     goldStart.handle();
-    //detect data;
-    //NewPing selection(0, 0, 0);
-    bool i = true;
-    Serial.print("Start\n");
-
-    while (i) {
-        if (greenStart.resetClicked()) {
-            Serial.print("Green\n");
-            i = false;
-        }
-        if (goldStart.resetClicked()) {
-            Serial.print("Gold\n");
-            i = false;
-        }
-
+    if (greenStart.resetClicked()) {
+      Serial.print("Green\n");
+      actionTaken = true;
     }
-    delay(1000);
-
+    if (goldStart.resetClicked()) {
+      Serial.print("Gold\n");
+      actionTaken = true;
+    }
+    delay(15);
+  }
+  delay(1000);
 }
 
-
-//Loop Code from Button Testing
-// put your main code here, to run repeatedly:
-//void test() {
-//    btnList.handle();
-//    detect data;
-//    NewPing selection(0, 0, 0);
-//    bool i = true;
+// Loop Code from Button Testing
+//  put your main code here, to run repeatedly:
+// void test() {
+//     btnList.handle();
+//     detect data;
+//     NewPing selection(0, 0, 0);
+//     bool i = true;
 //
-//    Serial.println("Start");
+//     Serial.println("Start");
 //
-//    while (i) {
-//        if (greenStart.resetClicked()) {
-//            Serial.print("Green\n");
-//            i = false;
-//        }
-//        if (goldStart.resetClicked()) {
-//            Serial.print("Gold\n");
-//            i = false;
-//        }
+//     while (i) {
+//         if (greenStart.resetClicked()) {
+//             Serial.print("Green\n");
+//             i = false;
+//         }
+//         if (goldStart.resetClicked()) {
+//             Serial.print("Gold\n");
+//             i = false;
+//         }
 //
-//    }
-//    delay(1000);
-//}
+//     }
+//     delay(1000);
+// }
 //
