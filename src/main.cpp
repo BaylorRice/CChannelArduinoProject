@@ -70,6 +70,7 @@ Button greenStart(GREEN_START_BTN_PIN);
 Button goldStart(GOLD_START_BTN_PIN);
 Button *btns[] = {&greenStart, &goldStart};
 ButtonList btnList(btns);
+enum possibleColors {EMPTY, GREEN, GOLD};
 
 // Sensor Setup
 NewPing sonarGreen(TRIG_PIN_GREEN, ECHO_PIN_GREEN, MAX_DISTANCE);
@@ -243,15 +244,16 @@ class Claw {
 };
 
 // Detection Classes
-class detect {
+class Detect {
  private:
   bool caseReady = false;
   bool palletReady = false;
   bool buttonReady = false;
+  possibleColors startingColor = EMPTY;
 
  public:
   // default constructor
-  detect(bool caseIn = false, bool palletIn = false, bool buttonIn = false) {
+  Detect(bool caseIn = false, bool palletIn = false, bool buttonIn = false) {
     caseReady = caseIn;
     palletReady = palletIn;
     buttonReady = buttonIn;
@@ -338,8 +340,9 @@ void setup() {
 // Other Class Definitions
 Location loc;
 Claw claw;
+Detect detection;
 
 /// Main.cpp
 void loop() {
-  // Looping Code goes here
+  // Loop - Waiting for button input -> 
 }
