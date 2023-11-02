@@ -368,10 +368,12 @@ void loop() {
       caseSonarPtr = &sonarGreen;
       caseXPos = GREEN_CASE_XPOS;
       fromCaseRotDeg = 69;  // TODO Vlaue
+      nextColor = GOLD_COL;
     } else if (startingColor == GOLD_COL) {
       caseSonarPtr = &sonarGold;
       caseXPos = GOLD_CASE_XPOS;
       fromCaseRotDeg = -69;  // TODO Vlaue
+      nextColor = GREEN_COL;
     } else {
       Serial.print("ERROR: Constant Setting -> No constants set");
       // TODO Loop Stop
@@ -428,5 +430,6 @@ void loop() {
       // Rotate Z
       loc.rotateZto(0);
     }
+    startingColor = nextColor;
   }
 }
