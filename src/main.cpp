@@ -375,8 +375,8 @@ void loop() {
     // TODO Loop Stop
   }
 
-  // Move to Case (x then y)
-  loc.moveXto()
+  // Move to Case x
+  loc.moveXto(caseXPos);
 
   // Wait for Case
   while (!detection.getCaseReady()) {
