@@ -47,6 +47,7 @@ const int MIL_PER_STEP = 0.19;
 const int DEG_PER_STEP = 1.8;
 const int STEPS_PER_REVOLUTION = 200;
 const int SPEED = 200;
+enum possibleXPos {GREEN_POS, GOLD_POS, MIDDLE_POS};
 
 // Servo Motors
 // TO DO: Update servo pins
@@ -70,7 +71,7 @@ Button greenStart(GREEN_START_BTN_PIN);
 Button goldStart(GOLD_START_BTN_PIN);
 Button *btns[] = {&greenStart, &goldStart};
 ButtonList btnList(btns);
-enum possibleColors {EMPTY, GREEN, GOLD};
+enum possibleColors {EMPTY_COL, GREEN_COL, GOLD_COL};
 
 // Sensor Setup
 NewPing sonarGreen(TRIG_PIN_GREEN, ECHO_PIN_GREEN, MAX_DISTANCE);
