@@ -1,5 +1,4 @@
 #include <Arduino.h>
-#include "detect.h"
 
 void loop() {
   // put your main code here, to run repeatedly:

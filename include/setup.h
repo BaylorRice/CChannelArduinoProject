@@ -46,8 +46,11 @@
 #define SERVO_GRAB_PIN 9997
 #define SERVO_LIFT_PIN 9996
 // SERVO CONFIG
-int servo_g_pos = 0;
-int servo_z_pos = 0;
+int SERVO_GRAB_CLOSED_DEG = 100;
+int SERVO_LIFT_MIN = 0;
+
+int SERVO_GRAB_OPEN_DEG = 10;
+int SERVO_LEFT_MAX = 180;
 
 // Limit Switchs
 // TO DO: Update limit switch pins
@@ -91,8 +94,8 @@ void setup() {
     zStep.setSpeed(SPEED);
     // Servos
     gServo.attach(SERVO_GRAB_PIN);
-    zServo.attach(SERVO_LIFT_PIN);
     gServo.write(servo_g_pos);
+    zServo.attach(SERVO_LIFT_PIN);
     zServo.write(servo_z_pos);
 }
 
