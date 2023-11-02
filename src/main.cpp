@@ -42,8 +42,8 @@ const int Z_STEP_IN2 = 36;
 const int Z_STEP_IN3 = 34;
 const int Z_STEP_IN4 = 32;
 // STEPPER CONFIG
-const int MIL_PER_STEP = 0.19;
-const int DEG_PER_STEP = 1.8;
+const double MIL_PER_STEP = 0.19;
+const double DEG_PER_STEP = 1.8;
 const int STEPS_PER_REVOLUTION = 200;
 const int SPEED = 200;
 
