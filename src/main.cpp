@@ -353,75 +353,80 @@ Detect detection;
 /// Main.cpp
 void loop() {
   possibleColors startingColor = EMPTY_COL;
+  possibleColors nextColor = EMPTY_COL;
   NewPing *caseSonarPtr = NULL;
   double caseXPos = -1;
   int fromCaseRotDeg = -1;
   int colorCount = 0;
+  int runCount = 0;
 
   // Button Press -> Constants
   startingColor = detection.detectPress();
-  if (startingColor == GREEN_COL) {
-    caseSonarPtr = &sonarGreen;
-    caseXPos = GREEN_CASE_XPOS;
-    fromCaseRotDeg = 69;  // TODO Vlaue
-    colorCount = 0;
-  } else if (startingColor == GOLD_COL) {
-    caseSonarPtr = &sonarGold;
-    caseXPos = GOLD_CASE_XPOS;
-    fromCaseRotDeg = -69;  // TODO Vlaue
-    colorCount = 0;
-  } else {
-    Serial.print("ERROR: Constant Setting -> No constants set");
-    // TODO Loop Stop
+
+  for (runCount = 0; runCount < 1; runCount++) {
+    if (startingColor == GREEN_COL) {
+      caseSonarPtr = &sonarGreen;
+      caseXPos = GREEN_CASE_XPOS;
+      fromCaseRotDeg = 69;  // TODO Vlaue
+    } else if (startingColor == GOLD_COL) {
+      caseSonarPtr = &sonarGold;
+      caseXPos = GOLD_CASE_XPOS;
+      fromCaseRotDeg = -69;  // TODO Vlaue
+    } else {
+      Serial.print("ERROR: Constant Setting -> No constants set");
+      // TODO Loop Stop
+    }
+
+    for (colorCount = 0; colorCount < 4; colorCount++) {
+      // Move to Case x
+      loc.moveXto(caseXPos);
+
+      // Wait for Case
+      detection.setCaseReady(false);
+      while (!detection.getCaseReady()) {
+        detection.caseDetect(caseSonarPtr);
+        delay(15);
+      }
+
+      // Move to Case y
+      loc.moveYto(false);
+
+      // Lower to Case
+      loc.moveZ(false);
+
+      // Grab with Claw
+      claw.close();
+
+      // Upsies
+      loc.moveZ(true);
+
+      // Move Back
+      loc.moveYfor(250, 255, 1);
+      // Move for 2.5 seconds at full speed towards the PLL
+
+      // Move to Middle
+      loc.moveXto(MIDDLE_XPOS);
+
+      // Rotate to PLL
+      loc.rotateZto(180);
+
+      // Detect PLL-readiness
+      detection.setPalletReady(false);
+      while (!detection.getPalletReady()) {
+        detection.palletDetect();
+      }
+
+      // Move to PLL
+      loc.moveYto(true);
+
+      // Open Claw
+      claw.open();
+
+      // Move y to middle
+      loc.moveYfor(250, 255, -1);
+
+      // Rotate Z
+      loc.rotateZto(0);
+    }
   }
-
-  // Move to Case x
-  loc.moveXto(caseXPos);
-
-  // Wait for Case
-  detection.setCaseReady(false);
-  while (!detection.getCaseReady()) {
-    detection.caseDetect(caseSonarPtr);
-    delay(15);
-  }
-
-  // Move to Case y
-  loc.moveYto(false);
-
-  // Lower to Case
-  loc.moveZ(false);
-
-  // Grab with Claw
-  claw.close();
-
-  // Upsies
-  loc.moveZ(true);
-
-  // Move Back
-  loc.moveYfor(250, 255, 1);
-  // Move for 2.5 seconds at full speed towards the PLL
-
-  // Move to Middle
-  loc.moveXto(MIDDLE_XPOS);
-
-  // Rotate to PLL
-  loc.rotateZto(180);
-
-  // Detect PLL-readiness
-  detection.setPalletReady(false);
-  while (!detection.getPalletReady()) {
-    detection.palletDetect();
-  }
-
-  // Move to PLL
-  loc.moveYto(true);
-
-  // Open Claw
-  claw.open();
-
-  // Move y to middle
-  loc.moveYfor(250, 255, -1);
-
-  // Rotate Z
-  loc.rotateZto(0);
 }
