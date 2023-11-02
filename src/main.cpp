@@ -182,13 +182,13 @@ class Location {
     }
   }
 
-  void moveZ(bool zIn) {
+  void moveZ(bool up) {
     // TODO Update degree values
-    if (!getZUp() && (zIn == true)) {
+    if (!getZUp() && (up == true)) {
       // Servo to UP / TRUE
       zServo.write(0);
       setZUp(true);
-    } else if (getZUp() && (zIn == false)) {
+    } else if (getZUp() && (up == false)) {
       // Servo to DOWN / FALSE
       zServo.write(180);
       setZUp(false);
@@ -383,4 +383,30 @@ void loop() {
     detection.caseDetect(caseSonarPtr);
     delay(15);
   }
+
+  // Move to Case y
+  loc.moveYto(false);
+
+  // Lower to Case
+  loc.moveZ(false);
+
+  // Grab with Claw
+  claw.close();
+
+  // Upsies
+  loc.moveZ(true);
+
+  // Move Back
+  loc.moveYfor(250, 255, 1); // Move for 2.5 seconds at full speed towards the PLL
+
+  // Move to Middle
+  loc.moveX()
+
+  // Rotate to PLL
+  loc.rotateZto(180);
+
+  // Move to PLL
+  loc.moveYto(true);
+
+  // 
 }
