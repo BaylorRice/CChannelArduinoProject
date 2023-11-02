@@ -95,7 +95,7 @@ class Location {
   double zRot;
 
  public:
-  Location(double xIn, double yIn, bool zIn, double zRotIn) {
+  Location(double xIn = 0, double yIn = 0, bool zIn = 0, double zRotIn = 0) {
     xPos = xIn;
     yPos = yIn;
     zUp = zIn;
