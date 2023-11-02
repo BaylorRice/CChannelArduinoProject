@@ -37,6 +37,8 @@ const int Z_STEP_IN2 = 36;
 const int Z_STEP_IN3 = 34;
 const int Z_STEP_IN4 = 32;
 // STEPPER CONFIG
+const int MIL_PER_STEP = 0.19;
+const int DEG_PER_STEP = 1.8;
 const int STEPS_PER_REVOLUTION = 200;
 const int SPEED = 200;
 
@@ -52,8 +54,8 @@ int SERVO_LEFT_MAX = 180;
 
 // Limit Switchs
 // TO DO: Update limit switch pins
-const int LIMIT_SWITCH_1_PIN = 9995;
-const int LIMIT_SWITCH_2_PIN = 9994;
+const int LIMIT_SWITCH_PLL_PIN = 9995;
+const int LIMIT_SWITCH_CASE_PIN = 9994;
 
 // Button setup
 using Button = AblePulldownCallbackClickerButton;
@@ -237,7 +239,7 @@ class detect {
     palletReady = palletIn;
     buttonReady = buttonIn;
   }
-  
+
   // gets and sets
   bool getCaseReady(void) { return caseReady; }
   bool getPalletReady(void) { return palletReady; }
