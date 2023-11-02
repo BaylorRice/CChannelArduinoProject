@@ -416,5 +416,12 @@ void loop() {
   // Move to PLL
   loc.moveYto(true);
 
-  //
+  // Open Claw
+  claw.open();
+
+  // Move y to middle
+  loc.moveYfor(250, 255, -1);
+
+  // Rotate Z
+  loc.rotateZto(0);
 }
