@@ -10,6 +10,12 @@ private:
     bool buttonReady = false;
 
 public:
+    // default constructor
+    detect() {
+        caseReady = false;
+        palletReady = false;
+        buttonReady = false;
+    }
     // gets and sets
     bool getCaseReady(void);
     bool getPalletReady(void);
@@ -19,9 +25,9 @@ public:
     void setButtonReady(bool);
 
     // detect functions
-    bool caseDetect();
-    bool palletDetect();
-    NewPing detectPress();
+    void caseDetect(NewPing);
+    void palletDetect();
+    NewPing detectPress(bool);
 
 };
 

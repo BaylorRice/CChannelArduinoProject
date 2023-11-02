@@ -1,20 +1,30 @@
-
-
 #include <Arduino.h>
-
-// put function declarations here:
-int myFunction(int, int);
-
-void setup() {
-  // put your setup code here, to run once:
-  int result = myFunction(2, 3);
-}
+#include "detect.h"
 
 void loop() {
   // put your main code here, to run repeatedly:
-}
+  btnList.handle();
+  detect data;
+  NewPing selection(0,0,0);
+  bool i = true;
 
-// put function definitions here:
-int myFunction(int x, int y) {
-  return x + y;
+  Serial.println("Start");
+  
+  while (i) {
+    if(greenStart.resetClicked()) {
+      Serial.print("Green\n");
+      i = false;
+    }
+    if (goldStart.resetClicked()) {
+      Serial.print("Gold\n");
+      i = false;
+    }
+
+  }
+  delay(1000);
+  
+  
+
+  Serial.println("\nStop");
+  delay(1000);
 }
