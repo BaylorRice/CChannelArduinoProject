@@ -5,9 +5,9 @@
 #include <Servo.h>
 #include <Stepper.h>
 
-// Define component pins
-//  Buttons
-//  TO DO: Update Button pins
+/// Define component pins
+// Buttons
+// TO DO: Update Button pins
 const int GREEN_START_BTN_PIN = 52;
 const int GOLD_START_BTN_PIN = 53;
 
@@ -47,7 +47,6 @@ const int SERVO_LIFT_PIN = 9996;
 // SERVO CONFIG
 int SERVO_GRAB_CLOSED_DEG = 100;
 int SERVO_LIFT_MIN = 0;
-
 int SERVO_GRAB_OPEN_DEG = 10;
 int SERVO_LEFT_MAX = 180;
 
@@ -224,27 +223,6 @@ class Claw {
   }
 };
 
-void setup() {
-  Serial.begin(9600);
-  // Buttons
-  btnList.begin();
-  // DC Motor
-  pinMode(Y_DC_IN1, OUTPUT);
-  pinMode(Y_DC_IN2, OUTPUT);
-  pinMode(Y_DC_EN, OUTPUT);
-  digitalWrite(Y_DC_IN1, LOW);
-  digitalWrite(Y_DC_IN2, LOW);
-  digitalWrite(Y_DC_EN, LOW);
-  // Steppers
-  xStep.setSpeed(SPEED);
-  zStep.setSpeed(SPEED);
-  // Servos
-  gServo.attach(SERVO_GRAB_PIN);
-  gServo.write(SERVO_GRAB_CLOSED_DEG);
-  zServo.attach(SERVO_LIFT_PIN);
-  zServo.write(SERVO_LIFT_MIN);
-}
-
 // Detection Classes
 class detect {
  private:
@@ -315,6 +293,28 @@ class detect {
     return selection;
   }
 };
+
+/// Setup
+void setup() {
+  Serial.begin(9600);
+  // Buttons
+  btnList.begin();
+  // DC Motor
+  pinMode(Y_DC_IN1, OUTPUT);
+  pinMode(Y_DC_IN2, OUTPUT);
+  pinMode(Y_DC_EN, OUTPUT);
+  digitalWrite(Y_DC_IN1, LOW);
+  digitalWrite(Y_DC_IN2, LOW);
+  digitalWrite(Y_DC_EN, LOW);
+  // Steppers
+  xStep.setSpeed(SPEED);
+  zStep.setSpeed(SPEED);
+  // Servos
+  gServo.attach(SERVO_GRAB_PIN);
+  gServo.write(SERVO_GRAB_CLOSED_DEG);
+  zServo.attach(SERVO_LIFT_PIN);
+  zServo.write(SERVO_LIFT_MIN);
+}
 
 /// Main.cpp
 void loop() {
