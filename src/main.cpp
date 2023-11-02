@@ -111,13 +111,11 @@ class Location {
   bool getZUp() { return zUp; }
   double getZRot() { return zRot; }
 
-  void moveX(double xIn) {
-    double currentX = getXPos();
-    double newX = currentX + xIn;
-    double distanceMoved = newX - currentX;
+  void moveXto(double xIn) {
+    double distanceMoved = xIn - getXPos();
     int stepsToMove = distanceMoved / MIL_PER_STEP;
     xStep.step(stepsToMove);
-    setXPos(newX);
+    setXPos(xIn);
   }
 
   void moveYfor(int time, int speed, int dir) {
@@ -340,36 +338,5 @@ Claw claw;
 
 /// Main.cpp
 void loop() {
-  // Looping Code goes here
+  // Loop - Waiting for button input -> 
 }
-
-/*
-Loop Code from Button Testing
-
-// put your main code here, to run repeatedly:
-  btnList.handle();
-  detect data;
-  NewPing selection(0,0,0);
-  bool i = true;
-
-  Serial.println("Start");
-
-  while (i) {
-    if(greenStart.resetClicked()) {
-      Serial.print("Green\n");
-      i = false;
-    }
-    if (goldStart.resetClicked()) {
-      Serial.print("Gold\n");
-      i = false;
-    }
-
-  }
-  delay(1000);
-
-
-
-  Serial.println("\nStop");
-  delay(1000);
-
-  */
