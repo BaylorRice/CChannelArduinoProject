@@ -177,11 +177,11 @@ class Location {
     }
   }
 
-  void moveZ(bool up) {
+  void moveZup(bool up) {
     // TODO Update degree values
-    if (getZUp() != zIn) {
-        zServo.write(180 * !zIn);
-        setZUp(zIn);
+    if (getZUp() != up) {
+        zServo.write(180 * !up);
+        setZUp(up);
     }
 
   }
@@ -387,13 +387,13 @@ void loop() {
       loc.moveYto(false);
 
       // Lower to Case
-      loc.moveZ(false);
+      loc.moveZup(false);
 
       // Grab with Claw
       claw.close();
 
       // Upsies
-      loc.moveZ(true);
+      loc.moveZup(true);
 
       // Move Back
       loc.moveYfor(250, 255, 1);
