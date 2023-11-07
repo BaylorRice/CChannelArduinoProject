@@ -474,7 +474,7 @@ void loop() {
       // Move for 2.5 seconds at full speed towards the PLL
 
       // Move to Middle
-      loc.moveXto(MIDDLE_XPOS);
+      loc.moveXto(GREEN_CASE_XPOS);
 
       // Rotate to PLL
       loc.rotateZto(180);
