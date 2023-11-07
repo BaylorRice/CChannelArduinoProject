@@ -1,4 +1,3 @@
-
 /// Constants
 #include <AbleButtons.h>
 #include <Arduino.h>
@@ -9,14 +8,14 @@
 /// Define component pins
 // Buttons
 // TO DO: Update Button pins
-const int GREEN_START_BTN_PIN = 52;
-const int GOLD_START_BTN_PIN = 53;
+const int GREEN_START_BTN_PIN = 6;
+const int GOLD_START_BTN_PIN = 5;
 
 // Ultrasonic Sensors
-const int TRIG_PIN_GREEN = 52;
-const int ECHO_PIN_GREEN = 53;
-const int TRIG_PIN_GOLD = 50;
-const int ECHO_PIN_GOLD = 51;
+const int TRIG_PIN_GREEN = 3;
+const int ECHO_PIN_GREEN = 4;
+const int TRIG_PIN_GOLD = 8;
+const int ECHO_PIN_GOLD = 9;
 const int TRIG_PIN_PLL = 48;
 const int ECHO_PIN_PLL = 49;
 // SENSOR CONFIG
@@ -38,8 +37,8 @@ const int Z_STEP_IN2 = 36;
 const int Z_STEP_IN3 = 34;
 const int Z_STEP_IN4 = 32;
 // STEPPER CONFIG
-const int MIL_PER_STEP = 0.19;
-const int DEG_PER_STEP = 1.8;
+const double MIL_PER_STEP = 0.19;
+const double DEG_PER_STEP = 1.8;
 const int STEPS_PER_REVOLUTION = 200;
 const int SPEED = 200;
 
@@ -97,7 +96,8 @@ class Location {
   double zRot;
 
  public:
-  Location(double xIn = 0, double yIn = 0, bool zIn = 0, double zRotIn = 0) {
+  Location(double xIn = 0, double yIn = 0, bool zIn = false,
+           double zRotIn = 0) {
     xPos = xIn;
     yPos = yIn;
     zUp = zIn;
@@ -301,6 +301,7 @@ class Detect {
     possibleColors selection = EMPTY_COL;
     Serial.print("Waiting for Button...\n");
     while (data) {
+      btnList.handle();
       delay(5);
       if (greenStart.resetClicked()) {
         Serial.print("Button Pressed - Green\n");
