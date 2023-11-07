@@ -1,8 +1,3 @@
-// Some fun things I found while testing servos:
-// 1. If you don't newline a serial print, it makes the rest of the code not work
-// 2. That's it. It should work now. Happy Coding
-// -Past Reese
-
 /// Constants
 #include <AbleButtons.h>
 #include <Arduino.h>
@@ -13,14 +8,14 @@
 /// Define component pins
 // Buttons
 // TO DO: Update Button pins
-const int GREEN_START_BTN_PIN = 52;
-const int GOLD_START_BTN_PIN = 53;
+const int GREEN_START_BTN_PIN = 6;
+const int GOLD_START_BTN_PIN = 5;
 
 // Ultrasonic Sensors
-const int TRIG_PIN_GREEN = 52;
-const int ECHO_PIN_GREEN = 53;
-const int TRIG_PIN_GOLD = 50;
-const int ECHO_PIN_GOLD = 51;
+const int TRIG_PIN_GREEN = 3;
+const int ECHO_PIN_GREEN = 4;
+const int TRIG_PIN_GOLD = 8;
+const int ECHO_PIN_GOLD = 9;
 const int TRIG_PIN_PLL = 48;
 const int ECHO_PIN_PLL = 49;
 // SENSOR CONFIG
@@ -42,10 +37,16 @@ const int Z_STEP_IN2 = 36;
 const int Z_STEP_IN3 = 34;
 const int Z_STEP_IN4 = 32;
 // STEPPER CONFIG
-const int MIL_PER_STEP = 0.19;
-const int DEG_PER_STEP = 1.8;
+const double MIL_PER_STEP = 0.19;
+const double DEG_PER_STEP = 1.8;
 const int STEPS_PER_REVOLUTION = 200;
 const int SPEED = 200;
+
+// Realspace Locations
+const double GREEN_CASE_XPOS = 9999;  // CHANGE
+const double GOLD_CASE_XPOS = -9999;  // CHANGE
+const double CASE_YPOS = 9999;        // CHANGE
+const double MIDDLE_XPOS = 0;         // CHANGE
 
 // Servo Motors
 // TO DO: Update servo pins
@@ -69,6 +70,7 @@ Button greenStart(GREEN_START_BTN_PIN);
 Button goldStart(GOLD_START_BTN_PIN);
 Button *btns[] = {&greenStart, &goldStart};
 ButtonList btnList(btns);
+enum possibleColors { EMPTY_COL, GREEN_COL, GOLD_COL };
 
 // Sensor Setup
 NewPing sonarGreen(TRIG_PIN_GREEN, ECHO_PIN_GREEN, MAX_DISTANCE);
@@ -94,7 +96,8 @@ class Location {
   double zRot;
 
  public:
-  Location(double xIn = 0, double yIn = 0, bool zIn = 0, double zRotIn = 0) {
+  Location(double xIn = 0, double yIn = 0, bool zIn = false,
+           double zRotIn = 0) {
     xPos = xIn;
     yPos = yIn;
     zUp = zIn;
@@ -174,7 +177,7 @@ class Location {
     }
   }
 
-  void moveZ(bool zIn) {
+  void moveZ(bool up) {
     // TODO Update degree values
     if (getZUp() != zIn) {
         zServo.write(180 * !zIn);
@@ -210,10 +213,11 @@ class Claw {
   void open() {
     if (SERVO_GRAB_CLOSED_DEG < SERVO_GRAB_OPEN_DEG) {
       Serial.print(
-          "ERROR: Grab Servo open()- Closed Deg must be larger than Open Deg\n");
+          "ERROR: Grab Servo open()- Closed Deg must be larger than Open "
+          "Deg\n");
     }
     if (getGrab() == true) {
-    Serial.print("GrabServo - Opening\n");
+      Serial.print("GrabServo - Opening\n");
       for (int pos = SERVO_GRAB_CLOSED_DEG; pos >= SERVO_GRAB_OPEN_DEG; pos--) {
         gServo.write(pos);
         delay(15);
@@ -225,10 +229,11 @@ class Claw {
   void close() {
     if (SERVO_GRAB_CLOSED_DEG < SERVO_GRAB_OPEN_DEG) {
       Serial.print(
-          "ERROR: Grab Servo closed()- Closed Deg must be larger than Open Deg\n");
+          "ERROR: Grab Servo closed()- Closed Deg must be larger than Open "
+          "Deg\n");
     }
     if (getGrab() == false) {
-    Serial.print("GrabServo - Closing\n");
+      Serial.print("GrabServo - Closing\n");
       for (int pos = SERVO_GRAB_OPEN_DEG; pos <= SERVO_GRAB_CLOSED_DEG; pos++) {
         gServo.write(pos);
         delay(15);
@@ -240,7 +245,7 @@ class Claw {
 };
 
 // Detection Classes
-class detect {
+class Detect {
  private:
   bool caseReady = false;
   bool palletReady = false;
@@ -248,7 +253,7 @@ class detect {
 
  public:
   // default constructor
-  detect(bool caseIn = false, bool palletIn = false, bool buttonIn = false) {
+  Detect(bool caseIn = false, bool palletIn = false, bool buttonIn = false) {
     caseReady = caseIn;
     palletReady = palletIn;
     buttonReady = buttonIn;
@@ -263,11 +268,11 @@ class detect {
   void setButtonReady(bool data) { buttonReady = data; }
 
   // detect functions
-  void caseDetect(NewPing selection) {
+  void caseDetect(NewPing *selection) {
     int time, distance;
 
-    time = selection.ping_median(NUM_PINGS);
-    distance = selection.convert_cm(time);
+    time = selection->ping_median(NUM_PINGS);
+    distance = selection->convert_cm(time);
 
     if (distance < 5) {
       setCaseReady(true);
@@ -290,19 +295,20 @@ class detect {
       setPalletReady(false);
     }
   }
-  NewPing detectPress(bool data) {
-    NewPing selection(0, 0, 0);
-
+  possibleColors detectPress(bool data = true) {
+    possibleColors selection = EMPTY_COL;
+    Serial.print("Waiting for Button...\n");
     while (data) {
-      Serial.print("...");
+      btnList.handle();
+      delay(5);
       if (greenStart.resetClicked()) {
-        Serial.println("Green\n");
-        selection = sonarGreen;
+        Serial.print("Button Pressed - Green\n");
+        selection = GREEN_COL;
         setButtonReady(false);
       }
       if (goldStart.resetClicked()) {
-        Serial.println("Gold\n");
-        selection = sonarGold;
+        Serial.print("Button Pressed - Gold\n");
+        selection = GOLD_COL;
         setButtonReady(false);
       }
     }
@@ -335,8 +341,88 @@ void setup() {
 // Other Class Definitions
 Location loc;
 Claw claw;
+Detect detection;
 
 /// Main.cpp
 void loop() {
-  // Loop - Waiting for button input -> 
+  possibleColors startingColor = EMPTY_COL;
+  possibleColors nextColor = EMPTY_COL;
+  NewPing *caseSonarPtr = NULL;
+  double caseXPos = -1;
+  int fromCaseRotDeg = -1;
+  int colorCount = 0;
+  int runCount = 0;
+
+  // Button Press -> Constants
+  startingColor = detection.detectPress();
+
+  for (runCount = 0; runCount < 2; runCount++) {
+    if (startingColor == GREEN_COL) {
+      caseSonarPtr = &sonarGreen;
+      caseXPos = GREEN_CASE_XPOS;
+      fromCaseRotDeg = 69;  // TODO Vlaue
+      nextColor = GOLD_COL;
+    } else if (startingColor == GOLD_COL) {
+      caseSonarPtr = &sonarGold;
+      caseXPos = GOLD_CASE_XPOS;
+      fromCaseRotDeg = -69;  // TODO Vlaue
+      nextColor = GREEN_COL;
+    } else {
+      Serial.print("ERROR: Constant Setting -> No constants set");
+      // TODO Loop Stop
+    }
+
+    for (colorCount = 0; colorCount < 4; colorCount++) {
+      // Move to Case x
+      loc.moveXto(caseXPos);
+
+      // Wait for Case
+      detection.setCaseReady(false);
+      while (!detection.getCaseReady()) {
+        detection.caseDetect(caseSonarPtr);
+        delay(15);
+      }
+
+      // Move to Case in y dir
+      loc.moveYto(false);
+
+      // Lower to Case
+      loc.moveZ(false);
+
+      // Grab with Claw
+      claw.close();
+
+      // Upsies
+      loc.moveZ(true);
+
+      // Move Back
+      loc.moveYfor(250, 255, 1);
+      // Move for 2.5 seconds at full speed towards the PLL
+
+      // Move to Middle
+      loc.moveXto(MIDDLE_XPOS);
+
+      // Rotate to PLL
+      loc.rotateZto(180);
+
+      // Detect PLL-readiness
+      detection.setPalletReady(false);
+      while (!detection.getPalletReady()) {
+        detection.palletDetect();
+      }
+
+      // Move to PLL
+      loc.moveYto(true);
+
+      // Open Claw
+      claw.open();
+
+      // Move y to middle
+      loc.moveYfor(250, 255, -1);
+
+      // Rotate Z
+      loc.rotateZto(0);
+    }
+    startingColor = nextColor;
+  }
 }
