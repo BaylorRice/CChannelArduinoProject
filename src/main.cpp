@@ -1,9 +1,3 @@
-// Some fun things I found while testing servos:
-// 1. If you don't newline a serial print, it makes the rest of the code not
-// work
-// 2. That's it. It should work now. Happy Coding
-// -Past Reese
-
 /// Constants
 #include <AbleButtons.h>
 #include <Arduino.h>
@@ -48,6 +42,12 @@ const double DEG_PER_STEP = 1.8;
 const int STEPS_PER_REVOLUTION = 200;
 const int SPEED = 200;
 
+// Realspace Locations
+const double GREEN_CASE_XPOS = 9999;  // CHANGE
+const double GOLD_CASE_XPOS = -9999;  // CHANGE
+const double CASE_YPOS = 9999;        // CHANGE
+const double MIDDLE_XPOS = 0;         // CHANGE
+
 // Servo Motors
 // TO DO: Update servo pins
 const int SERVO_GRAB_PIN = 9;
@@ -70,6 +70,7 @@ Button greenStart(GREEN_START_BTN_PIN);
 Button goldStart(GOLD_START_BTN_PIN);
 Button *btns[] = {&greenStart, &goldStart};
 ButtonList btnList(btns);
+enum possibleColors { EMPTY_COL, GREEN_COL, GOLD_COL };
 
 // Sensor Setup
 NewPing sonarGreen(TRIG_PIN_GREEN, ECHO_PIN_GREEN, MAX_DISTANCE);
@@ -175,13 +176,13 @@ class Location {
     }
   }
 
-  void moveZ(bool zIn) {
+  void moveZ(bool up) {
     // TODO Update degree values
-    if (!getZUp() && (zIn == true)) {
+    if (!getZUp() && (up == true)) {
       // Servo to UP / TRUE
       zServo.write(0);
       setZUp(true);
-    } else if (getZUp() && (zIn == false)) {
+    } else if (getZUp() && (up == false)) {
       // Servo to DOWN / FALSE
       zServo.write(180);
       setZUp(false);
@@ -246,7 +247,7 @@ class Claw {
 };
 
 // Detection Classes
-class detect {
+class Detect {
  private:
   bool caseReady = false;
   bool palletReady = false;
@@ -254,7 +255,7 @@ class detect {
 
  public:
   // default constructor
-  detect(bool caseIn = false, bool palletIn = false, bool buttonIn = false) {
+  Detect(bool caseIn = false, bool palletIn = false, bool buttonIn = false) {
     caseReady = caseIn;
     palletReady = palletIn;
     buttonReady = buttonIn;
@@ -269,11 +270,11 @@ class detect {
   void setButtonReady(bool data) { buttonReady = data; }
 
   // detect functions
-  void caseDetect(NewPing selection) {
+  void caseDetect(NewPing *selection) {
     int time, distance;
 
-    time = selection.ping_median(NUM_PINGS);
-    distance = selection.convert_cm(time);
+    time = selection->ping_median(NUM_PINGS);
+    distance = selection->convert_cm(time);
 
     if (distance < 5) {
       setCaseReady(true);
@@ -296,19 +297,20 @@ class detect {
       setPalletReady(false);
     }
   }
-  NewPing detectPress(bool data) {
-    NewPing selection(0, 0, 0);
-
+  possibleColors detectPress(bool data = true) {
+    possibleColors selection = EMPTY_COL;
+    Serial.print("Waiting for Button...\n");
     while (data) {
       btnList.handle();
+      delay(5);
       if (greenStart.resetClicked()) {
-        Serial.println("Green\n");
-        selection = sonarGreen;
+        Serial.print("Button Pressed - Green\n");
+        selection = GREEN_COL;
         setButtonReady(false);
       }
       if (goldStart.resetClicked()) {
-        Serial.println("Gold\n");
-        selection = sonarGold;
+        Serial.print("Button Pressed - Gold\n");
+        selection = GOLD_COL;
         setButtonReady(false);
       }
     }
@@ -341,8 +343,88 @@ void setup() {
 // Other Class Definitions
 Location loc;
 Claw claw;
+Detect detection;
 
 /// Main.cpp
 void loop() {
-  
+  possibleColors startingColor = EMPTY_COL;
+  possibleColors nextColor = EMPTY_COL;
+  NewPing *caseSonarPtr = NULL;
+  double caseXPos = -1;
+  int fromCaseRotDeg = -1;
+  int colorCount = 0;
+  int runCount = 0;
+
+  // Button Press -> Constants
+  startingColor = detection.detectPress();
+
+  for (runCount = 0; runCount < 2; runCount++) {
+    if (startingColor == GREEN_COL) {
+      caseSonarPtr = &sonarGreen;
+      caseXPos = GREEN_CASE_XPOS;
+      fromCaseRotDeg = 69;  // TODO Vlaue
+      nextColor = GOLD_COL;
+    } else if (startingColor == GOLD_COL) {
+      caseSonarPtr = &sonarGold;
+      caseXPos = GOLD_CASE_XPOS;
+      fromCaseRotDeg = -69;  // TODO Vlaue
+      nextColor = GREEN_COL;
+    } else {
+      Serial.print("ERROR: Constant Setting -> No constants set");
+      // TODO Loop Stop
+    }
+
+    for (colorCount = 0; colorCount < 4; colorCount++) {
+      // Move to Case x
+      loc.moveXto(caseXPos);
+
+      // Wait for Case
+      detection.setCaseReady(false);
+      while (!detection.getCaseReady()) {
+        detection.caseDetect(caseSonarPtr);
+        delay(15);
+      }
+
+      // Move to Case in y dir
+      loc.moveYto(false);
+
+      // Lower to Case
+      loc.moveZ(false);
+
+      // Grab with Claw
+      claw.close();
+
+      // Upsies
+      loc.moveZ(true);
+
+      // Move Back
+      loc.moveYfor(250, 255, 1);
+      // Move for 2.5 seconds at full speed towards the PLL
+
+      // Move to Middle
+      loc.moveXto(MIDDLE_XPOS);
+
+      // Rotate to PLL
+      loc.rotateZto(180);
+
+      // Detect PLL-readiness
+      detection.setPalletReady(false);
+      while (!detection.getPalletReady()) {
+        detection.palletDetect();
+      }
+
+      // Move to PLL
+      loc.moveYto(true);
+
+      // Open Claw
+      claw.open();
+
+      // Move y to middle
+      loc.moveYfor(250, 255, -1);
+
+      // Rotate Z
+      loc.rotateZto(0);
+    }
+    startingColor = nextColor;
+  }
 }
