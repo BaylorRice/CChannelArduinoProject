@@ -426,7 +426,6 @@ void loop() {
   possibleColors nextColor = EMPTY_COL;
   NewPing *caseSonarPtr = NULL;
   double caseXPos = -1;
-  int fromCaseRotDeg = -1;
   int colorCount = 0;
   int runCount = 0;
 
@@ -437,12 +436,10 @@ void loop() {
     if (startingColor == GREEN_COL) {
       caseSonarPtr = &sonarGreen;
       caseXPos = GREEN_CASE_XPOS;
-      fromCaseRotDeg = 69;  // TODO Vlaue
       nextColor = GOLD_COL;
     } else if (startingColor == GOLD_COL) {
       caseSonarPtr = &sonarGold;
       caseXPos = GOLD_CASE_XPOS;
-      fromCaseRotDeg = -69;  // TODO Vlaue
       nextColor = GREEN_COL;
     } else {
       Serial.print("ERROR: Constant Setting -> No constants set");
