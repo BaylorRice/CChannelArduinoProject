@@ -95,6 +95,11 @@ class Location {
   bool zUp;
   double zRot;
 
+  void setXPos(double xIn) { xPos = xIn; }
+  void setYPos(double yIn) { yPos = yIn; }
+  void setZUp(bool zIn) { zUp = zIn; }
+  void setZRot(double zRotIn) { zRot = zRotIn; }
+
  public:
   Location(double xIn = 0, double yIn = 0, bool zIn = false,
            double zRotIn = 0) {
@@ -102,26 +107,52 @@ class Location {
     yPos = yIn;
     zUp = zIn;
     zRot = zRotIn;
+    Serial.print("Location Object Initialized!\n");
   }
 
-  void setXPos(double xIn) { xPos = xIn; }
-  void setYPos(double yIn) { yPos = yIn; }
-  void setZUp(bool zIn) { zUp = zIn; }
-  void setZRot(double zRotIn) { zRot = zRotIn; }
-
-  double getXPos() { return xPos; }
-  double getYPos() { return yPos; }
-  bool getZUp() { return zUp; }
-  double getZRot() { return zRot; }
+  double getXPos() {
+    Serial.print("Got XPos = ");
+    Serial.print(xPos);
+    Serial.print("\n");
+    return xPos;
+  }
+  double getYPos() {
+    Serial.print("Got YPos = ");
+    Serial.print(yPos);
+    Serial.print("\n");
+    return yPos;
+  }
+  bool getZUp() {
+    Serial.print("Got ZPos = ");
+    Serial.print(zUp);
+    Serial.print("\n");
+    return zUp;
+  }
+  double getZRot() {
+    Serial.print("Got ZRot = ");
+    Serial.print(zRot);
+    Serial.print("\n");
+    return zRot;
+  }
 
   void moveXto(double xIn) {
+    Serial.print("Moving X to -> ");
+    Serial.print(xIn);
+    Serial.print("\n");
+
     double distanceMoved = xIn - getXPos();
     int stepsToMove = distanceMoved / MIL_PER_STEP;
     xStep.step(stepsToMove);
     setXPos(xIn);
+
+    Serial.print("X Moved\n");
   }
 
   void moveYfor(int time, int speed, int dir) {
+    Serial.print("Moving Y for -> ");
+    Serial.print(time);
+    Serial.print(" milliseconds\n");
+
     // Speed Check
     if (speed < 0) {
       speed = -speed;
@@ -158,8 +189,14 @@ class Location {
 
     // TODO: Update yPos to reflect movement (may not be possible)
     // setYPos(getYPos() + calculated delta)
+
+    Serial.print("Moved Y\n");
   }
   void moveYto(bool PLL) {
+    Serial.print("Moving Y to -> ");
+    Serial.print(PLL);
+    Serial.print(": 1 for PLL\n");
+
     if (PLL) {
       // TODO: Refine this
 
@@ -175,22 +212,34 @@ class Location {
       digitalWrite(Y_DC_IN1, LOW);
       digitalWrite(Y_DC_IN2, LOW);
     }
+
+    Serial.print("Moved Y\n");
   }
 
   void moveZup(bool up) {
-    // TODO Update degree values
-    if (getZUp() != up) {
-        zServo.write(180 * !up);
-        setZUp(up);
-    }
+    Serial.print("Moving Z up to ->");
+    Serial.print(up);
+    Serial.print("\n");
 
+    // TODO Update degree values and delay
+    zServo.write(180 * !up);
+    delay(1000);
+    setZUp(up);
+
+    Serial.print("Z moved\n");
   }
   void rotateZto(double zRotIn) {
+    Serial.print("Rotating Z to ->");
+    Serial.print(zRotIn);
+    Serial.print("\n");
+
     double currentZrot = getZRot();
     double moveAngle = currentZrot - zRotIn;
     int moveSteps = moveAngle / DEG_PER_STEP;
     zStep.step(moveSteps);
     setZRot(zRotIn);
+
+    Serial.print("Z Rotated\n");
   }
 };
 
@@ -201,13 +250,24 @@ class Claw {
 
   void setGrab(bool grabIn) { grabbed = grabIn; }
   void setAngle(int angleIn) { angle = angleIn; }
-  bool getGrab() { return grabbed; }
-  int getAngle() { return angle; }
 
  public:
   Claw(bool grabIn = true, int angleIn = 0) {
     grabbed = grabIn;
     angle = angleIn;
+  }
+
+  bool getGrab() {
+    Serial.print("Got Claw Grab = ");
+    Serial.print(grabbed);
+    Serial.print("\n");
+    return grabbed;
+  }
+  int getAngle() {
+    Serial.print("Got Claw Angle = ");
+    Serial.print(angle);
+    Serial.print("\n");
+    return angle;
   }
 
   void open() {
@@ -260,15 +320,31 @@ class Detect {
   }
 
   // gets and sets
-  bool getCaseReady(void) { return caseReady; }
-  bool getPalletReady(void) { return palletReady; }
-  bool getButtonReady(void) { return buttonReady; }
+  bool getCaseReady(void) {
+    Serial.print("Get Case Ready = ");
+    Serial.print(caseReady);
+    Serial.print("\n");
+    return caseReady;
+  }
+  bool getPalletReady(void) {
+    Serial.print("Get Pallet Ready = ");
+    Serial.print(palletReady);
+    Serial.print("\n");
+    return palletReady;
+  }
+  bool getButtonReady(void) {
+    Serial.print("Get Button Ready = ");
+    Serial.print(buttonReady);
+    Serial.print("\n");
+    return buttonReady;
+  }
   void setCaseReady(bool sensorData) { caseReady = sensorData; }
   void setPalletReady(bool sensorData) { palletReady = sensorData; }
   void setButtonReady(bool data) { buttonReady = data; }
 
   // detect functions
   void caseDetect(NewPing *selection) {
+    Serial.print("Detecting Case...\n");
     int time, distance;
 
     time = selection->ping_median(NUM_PINGS);
@@ -276,13 +352,14 @@ class Detect {
 
     if (distance < 5) {
       setCaseReady(true);
-      Serial.print("case ready");
+      Serial.print("Result -> Case ready\n");
     } else {
       setCaseReady(false);
-      Serial.print("not case ready");
+      Serial.print("Result -> Not Case ready\n");
     }
-    Serial.print("\nDistance: ");
+    Serial.print("Distance: ");
     Serial.print(distance);
+    Serial.print("\n");
   }
   void palletDetect() {
     int time, distance;
