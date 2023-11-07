@@ -406,13 +406,13 @@ void setup() {
   digitalWrite(Y_DC_IN2, LOW);
   digitalWrite(Y_DC_EN, LOW);
   // Steppers
-  // xStep.setSpeed(SPEED);
-  // zStep.setSpeed(SPEED);
+  xStep.setSpeed(SPEED);
+  zStep.setSpeed(SPEED);
   // Servos
   gServo.attach(SERVO_GRAB_PIN);
   gServo.write(SERVO_GRAB_CLOSED_DEG);
-  // zServo.attach(SERVO_LIFT_PIN);
-  // zServo.write(SERVO_LIFT_MIN);
+  zServo.attach(SERVO_LIFT_PIN);
+  zServo.write(SERVO_LIFT_MIN);
 }
 
 // Other Class Definitions
