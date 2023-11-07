@@ -420,7 +420,7 @@ Location loc;
 Claw claw;
 Detect detection;
 
-/// Main.cpp
+/// Main Driver
 void loop() {
   possibleColors startingColor = EMPTY_COL;
   possibleColors nextColor = EMPTY_COL;
