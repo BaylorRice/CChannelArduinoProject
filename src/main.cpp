@@ -202,7 +202,7 @@ class Location {
       digitalWrite(Y_DC_IN1, HIGH);
       digitalWrite(Y_DC_IN2, LOW);
 
-      while (digitalRead(LIMIT_SWITCH_PLL_PIN) != HIGH) {
+      while (digitalRead(LIMIT_SWITCH_PLL_PIN) != LOW) {
         delay(1);
       }
 
@@ -214,7 +214,7 @@ class Location {
       digitalWrite(Y_DC_IN1, LOW);
       digitalWrite(Y_DC_IN2, HIGH);
 
-      while (digitalRead(LIMIT_SWITCH_CASE_PIN) != HIGH) {
+      while (digitalRead(LIMIT_SWITCH_CASE_PIN) != LOW) {
         delay(1);
       }
 
@@ -382,21 +382,22 @@ class Detect {
       setPalletReady(false);
     }
   }
-  possibleColors detectPress(bool data = true) {
+  possibleColors detectPress() {
+    bool buttonPressed = false;
     possibleColors selection = EMPTY_COL;
     Serial.print("Waiting for Button...\n");
-    while (data) {
+    while (!buttonPressed) {
       btnList.handle();
       delay(5);
       if (greenStart.resetClicked()) {
         Serial.print("Button Pressed - Green\n");
         selection = GREEN_COL;
-        setButtonReady(false);
+        buttonPressed = true;
       }
       if (goldStart.resetClicked()) {
         Serial.print("Button Pressed - Gold\n");
         selection = GOLD_COL;
-        setButtonReady(false);
+        buttonPressed = true;
       }
     }
     return selection;
@@ -408,6 +409,8 @@ void setup() {
   Serial.begin(9600);
   // Buttons
   btnList.begin();
+  pinMode(LIMIT_SWITCH_CASE_PIN, INPUT_PULLUP);
+  pinMode(LIMIT_SWITCH_PLL_PIN, INPUT_PULLUP);
   // DC Motor
   pinMode(Y_DC_IN1, OUTPUT);
   pinMode(Y_DC_IN2, OUTPUT);
@@ -415,6 +418,7 @@ void setup() {
   digitalWrite(Y_DC_IN1, LOW);
   digitalWrite(Y_DC_IN2, LOW);
   digitalWrite(Y_DC_EN, LOW);
+  analogWrite(Y_DC_EN,255);
   // Steppers
   xStep.setSpeed(SPEED);
   zStep.setSpeed(SPEED);
