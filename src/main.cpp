@@ -22,7 +22,7 @@ const int ECHO_PIN_PLL = 49;
 const int MAX_DISTANCE = 400;
 const int NUM_PINGS = 15;
 
-// DC Motor
+// DC Motor (Negative side of motor into Out1, Postitive into Out2)
 const int Y_DC_IN1 = 22;
 const int Y_DC_IN2 = 23;
 const int Y_DC_EN = 2;
