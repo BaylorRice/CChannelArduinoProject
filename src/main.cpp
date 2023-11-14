@@ -441,6 +441,8 @@ void loop() {
 
   if (runColor == GREEN_COL) {
     loc.moveYto(true);
+  } else if (runColor == GOLD_COL) {
+    loc.moveYto(false);
   }
 }
 /*
