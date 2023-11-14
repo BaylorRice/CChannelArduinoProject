@@ -60,8 +60,8 @@ int SERVO_LEFT_MAX = 180;
 
 // Limit Switchs
 // TO DO: Update limit switch pins
-const int LIMIT_SWITCH_PLL_PIN = 9995;
-const int LIMIT_SWITCH_CASE_PIN = 9994;
+const int LIMIT_SWITCH_PLL_PIN = 28;
+const int LIMIT_SWITCH_CASE_PIN = 29;
 
 // Button setup
 using Button = AblePulldownCallbackClickerButton;
@@ -198,13 +198,23 @@ class Location {
     Serial.print(": 1 for PLL\n");
 
     if (PLL) {
-      // TODO: Refine this
-
       // Move Towards PLL
       digitalWrite(Y_DC_IN1, HIGH);
       digitalWrite(Y_DC_IN2, LOW);
 
-      while (digitalRead(LIMIT_SWITCH_PLL_PIN) == LOW) {
+      while (digitalRead(LIMIT_SWITCH_PLL_PIN) != HIGH) {
+        delay(1);
+      }
+
+      // Stop Motor
+      digitalWrite(Y_DC_IN1, LOW);
+      digitalWrite(Y_DC_IN2, LOW);
+    } else {
+      // Move Towards Case
+      digitalWrite(Y_DC_IN1, LOW);
+      digitalWrite(Y_DC_IN2, HIGH);
+
+      while (digitalRead(LIMIT_SWITCH_CASE_PIN) != HIGH) {
         delay(1);
       }
 
@@ -422,7 +432,19 @@ Detect detection;
 
 /// Main Driver
 void loop() {
-  possibleColors startingColor = EMPTY_COL;
+  /// Testing DC, Limit Switches, and Buttons
+
+  possibleColors runColor = EMPTY_COL;
+
+  // Detect Button Press
+  runColor = detection.detectPress();
+
+  if (runColor == GREEN_COL) {
+    loc.moveYto(true);
+  }
+}
+/*
+possibleColors startingColor = EMPTY_COL;
   possibleColors nextColor = EMPTY_COL;
   NewPing *caseSonarPtr = NULL;
   double caseXPos = -1;
@@ -499,4 +521,4 @@ void loop() {
     }
     startingColor = nextColor;
   }
-}
+  */
