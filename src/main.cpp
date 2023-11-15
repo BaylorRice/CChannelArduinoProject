@@ -51,10 +51,10 @@ const double MIDDLE_XPOS = 0;         // CHANGE
 // Servo Motors
 // TO DO: Update servo pins
 const int SERVO_GRAB_PIN = 9;
-const int SERVO_LIFT_PIN = 9996;
+const int SERVO_LIFT_PIN = 10;
 // SERVO CONFIG
 int SERVO_GRAB_CLOSED_DEG = 180;
-int SERVO_GRAB_OPEN_DEG = 50;  // Open deg must be smaller than closed deg
+int SERVO_GRAB_OPEN_DEG = 0;  // Open deg must be smaller than closed deg
 int SERVO_LIFT_MIN = 0;
 int SERVO_LEFT_MAX = 180;
 
@@ -438,16 +438,20 @@ Detect detection;
 void loop() {
   /// Testing DC, Limit Switches, and Buttons
 
-  possibleColors runColor = EMPTY_COL;
+  //possibleColors runColor = EMPTY_COL;
 
   // Detect Button Press
-  runColor = detection.detectPress();
-
+  //runColor = detection.detectPress();
+/*
   if (runColor == GREEN_COL) {
     loc.moveYto(true);
   } else if (runColor == GOLD_COL) {
     loc.moveYto(false);
   }
+*/
+  loc.moveZup(false);
+  delay(5000);
+  loc.moveZup(true);
 }
 /*
 possibleColors startingColor = EMPTY_COL;
@@ -457,7 +461,7 @@ possibleColors startingColor = EMPTY_COL;
   int colorCount = 0;
   int runCount = 0;
 
-  // Button Press -> Constants
+  // Button Press -> Constants 
   startingColor = detection.detectPress();
 
   for (runCount = 0; runCount < 2; runCount++) {
