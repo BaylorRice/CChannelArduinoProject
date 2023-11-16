@@ -44,8 +44,8 @@ const int SPEED = 200;
 // Realspace Locations
 const double GREEN_CASE_XPOS = 0;
 const double GOLD_CASE_XPOS = 11;
-//const double CASE_YPOS = 9999;        
-const double MIDDLE_XPOS = 7.95; 
+// const double CASE_YPOS = 9999;
+const double MIDDLE_XPOS = 7.95;
 
 // Servo Motors
 const int SERVO_GRAB_PIN = 9;
@@ -175,10 +175,10 @@ class Location {
     // Wait <time> milliseconds (with limit switch bump stopping)
     for (int i = 0; i < time; i++) {
       delay(1);
-      //if (digitalRead(LIMIT_SWITCH_PLL_PIN) == HIGH ||
-      //    digitalRead(LIMIT_SWITCH_CASE_PIN) == HIGH) {
-      //  break;
-      //}
+      // if (digitalRead(LIMIT_SWITCH_PLL_PIN) == HIGH ||
+      //     digitalRead(LIMIT_SWITCH_CASE_PIN) == HIGH) {
+      //   break;
+      // }
     }
 
     // Stop Motor
@@ -416,7 +416,7 @@ void setup() {
   digitalWrite(Y_DC_IN1, LOW);
   digitalWrite(Y_DC_IN2, LOW);
   digitalWrite(Y_DC_EN, LOW);
-  analogWrite(Y_DC_EN,255);
+  analogWrite(Y_DC_EN, 255);
   // Steppers
   xStep.setSpeed(SPEED);
   zStep.setSpeed(SPEED);
@@ -434,26 +434,14 @@ Detect detection;
 
 /// Main Driver
 void loop() {
-  possibleColors runColor = EMPTY_COL;
-
-  // Detect Button Press
-  runColor = detection.detectPress();
-
-  if (runColor == GREEN_COL) {
-    loc.moveYfor(1000, 127, 1);
-  } else if (runColor == GOLD_COL) {
-    loc.moveYfor(1000, 127, -1);
-  }
-}
-/*
-possibleColors startingColor = EMPTY_COL;
+  possibleColors startingColor = EMPTY_COL;
   possibleColors nextColor = EMPTY_COL;
   NewPing *caseSonarPtr = NULL;
   double caseXPos = -1;
   int colorCount = 0;
   int runCount = 0;
 
-  // Button Press -> Constants 
+  // Button Press -> Constants
   startingColor = detection.detectPress();
 
   for (runCount = 0; runCount < 2; runCount++) {
@@ -472,85 +460,115 @@ possibleColors startingColor = EMPTY_COL;
     }
 
     for (colorCount = 0; colorCount < 4; colorCount++) {
-      
     }
     startingColor = nextColor;
-*/
-/*
-possibleColors startingColor = EMPTY_COL;
-  possibleColors nextColor = EMPTY_COL;
-  NewPing *caseSonarPtr = NULL;
-  double caseXPos = -1;
-  int colorCount = 0;
-  int runCount = 0;
+  }
+  /*
+  possibleColors startingColor = EMPTY_COL;
+    possibleColors nextColor = EMPTY_COL;
+    NewPing *caseSonarPtr = NULL;
+    double caseXPos = -1;
+    int colorCount = 0;
+    int runCount = 0;
 
-  // Button Press -> Constants 
-  startingColor = detection.detectPress();
+    // Button Press -> Constants
+    startingColor = detection.detectPress();
 
-  for (runCount = 0; runCount < 2; runCount++) {
-    if (startingColor == GREEN_COL) {
-      caseSonarPtr = &sonarGreen;
-      caseXPos = GREEN_CASE_XPOS;
-      nextColor = GOLD_COL;
-    } else if (startingColor == GOLD_COL) {
-      caseSonarPtr = &sonarGold;
-      caseXPos = GOLD_CASE_XPOS;
-      nextColor = GREEN_COL;
-    } else {
-      Serial.print("ERROR: Constant Setting -> No constants set");
-      // TODO Loop Stop
-    }
-
-    for (colorCount = 0; colorCount < 4; colorCount++) {
-      // Move to Case x
-      loc.moveXto(caseXPos);
-
-      // Wait for Case
-      detection.setCaseReady(false);
-      while (!detection.getCaseReady()) {
-        detection.caseDetect(caseSonarPtr);
-        delay(15);
+    for (runCount = 0; runCount < 2; runCount++) {
+      if (startingColor == GREEN_COL) {
+        caseSonarPtr = &sonarGreen;
+        caseXPos = GREEN_CASE_XPOS;
+        nextColor = GOLD_COL;
+      } else if (startingColor == GOLD_COL) {
+        caseSonarPtr = &sonarGold;
+        caseXPos = GOLD_CASE_XPOS;
+        nextColor = GREEN_COL;
+      } else {
+        Serial.print("ERROR: Constant Setting -> No constants set");
+        // TODO Loop Stop
+        break;
       }
 
-      // Move to Case in y dir
-      loc.moveYto(false);
+      for (colorCount = 0; colorCount < 4; colorCount++) {
 
-      // Lower to Case
-      loc.moveZup(false);
+      }
+      startingColor = nextColor;
+  */
+  /*
+  possibleColors startingColor = EMPTY_COL;
+    possibleColors nextColor = EMPTY_COL;
+    NewPing *caseSonarPtr = NULL;
+    double caseXPos = -1;
+    int colorCount = 0;
+    int runCount = 0;
 
-      // Grab with Claw
-      claw.close();
+    // Button Press -> Constants
+    startingColor = detection.detectPress();
 
-      // Upsies
-      loc.moveZup(true);
-
-      // Move Back
-      loc.moveYfor(250, 255, 1);
-      // Move for 2.5 seconds at full speed towards the PLL
-
-      // Move to Middle
-      loc.moveXto(GREEN_CASE_XPOS);
-
-      // Rotate to PLL
-      loc.rotateZto(180);
-
-      // Detect PLL-readiness
-      detection.setPalletReady(false);
-      while (!detection.getPalletReady()) {
-        detection.palletDetect();
+    for (runCount = 0; runCount < 2; runCount++) {
+      if (startingColor == GREEN_COL) {
+        caseSonarPtr = &sonarGreen;
+        caseXPos = GREEN_CASE_XPOS;
+        nextColor = GOLD_COL;
+      } else if (startingColor == GOLD_COL) {
+        caseSonarPtr = &sonarGold;
+        caseXPos = GOLD_CASE_XPOS;
+        nextColor = GREEN_COL;
+      } else {
+        Serial.print("ERROR: Constant Setting -> No constants set");
+        // TODO Loop Stop
       }
 
-      // Move to PLL
-      loc.moveYto(true);
+      for (colorCount = 0; colorCount < 4; colorCount++) {
+        // Move to Case x
+        loc.moveXto(caseXPos);
 
-      // Open Claw
-      claw.open();
+        // Wait for Case
+        detection.setCaseReady(false);
+        while (!detection.getCaseReady()) {
+          detection.caseDetect(caseSonarPtr);
+          delay(15);
+        }
 
-      // Move y to middle
-      loc.moveYfor(250, 255, -1);
+        // Move to Case in y dir
+        loc.moveYto(false);
 
-      // Rotate Z
-      loc.rotateZto(0);
-    }
-    startingColor = nextColor;
-    */
+        // Lower to Case
+        loc.moveZup(false);
+
+        // Grab with Claw
+        claw.close();
+
+        // Upsies
+        loc.moveZup(true);
+
+        // Move Back
+        loc.moveYfor(250, 255, 1);
+        // Move for 2.5 seconds at full speed towards the PLL
+
+        // Move to Middle
+        loc.moveXto(GREEN_CASE_XPOS);
+
+        // Rotate to PLL
+        loc.rotateZto(180);
+
+        // Detect PLL-readiness
+        detection.setPalletReady(false);
+        while (!detection.getPalletReady()) {
+          detection.palletDetect();
+        }
+
+        // Move to PLL
+        loc.moveYto(true);
+
+        // Open Claw
+        claw.open();
+
+        // Move y to middle
+        loc.moveYfor(250, 255, -1);
+
+        // Rotate Z
+        loc.rotateZto(0);
+      }
+      startingColor = nextColor;
+      */
