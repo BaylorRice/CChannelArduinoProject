@@ -7,16 +7,16 @@
 
 /// Define component pins
 // Buttons
-const int GREEN_START_BTN_PIN = 6;
-const int GOLD_START_BTN_PIN = 5;
+const int GREEN_START_BTN_PIN = 11;
+const int GOLD_START_BTN_PIN = 12;
 
 // Ultrasonic Sensors
-const int TRIG_PIN_GREEN = 3;
-const int ECHO_PIN_GREEN = 4;
-const int TRIG_PIN_GOLD = 8;
-const int ECHO_PIN_GOLD = 9;
-const int TRIG_PIN_PLL = 48;
-const int ECHO_PIN_PLL = 49;
+const int TRIG_PIN_GREEN = 7;
+const int ECHO_PIN_GREEN = 8;
+const int TRIG_PIN_GOLD = 3;
+const int ECHO_PIN_GOLD = 4;
+const int TRIG_PIN_PLL = 5;
+const int ECHO_PIN_PLL = 6;
 // SENSOR CONFIG
 const int MAX_DISTANCE = 400;
 const int NUM_PINGS = 15;
