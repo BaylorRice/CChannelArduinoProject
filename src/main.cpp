@@ -189,6 +189,7 @@ class Location {
     // TODO: Update yPos to reflect movement (may not be possible)
     // setYPos(getYPos() + calculated delta)
 
+    analogWrite(Y_DC_EN,255);
     Serial.print("Moved Y\n");
   }
   void moveYto(bool PLL) {
@@ -486,68 +487,87 @@ void loop() {
     }
 
     for (colorCount = 0; colorCount < 4; colorCount++) {
-      // Move to Case XPOS
+      // 1) Move to Case XPOS
+      Serial.print("1) -MOVING TO CASE XPOS-\n");
       loc.moveXto(caseXPos);
 
-      // Wait for Case
+      // 2) Wait for Case
+      Serial.print("2) -WAITING FOR CASE-\n");
       detection.setCaseReady(false);
       while (!detection.getCaseReady()) {
         detection.caseDetect(caseSonarPtr);
         delay(15);
       }
 
-      // Move Forward to Case
+      // 3) Move Forward to Case
+      Serial.print("3) -MOVING FORWARD TO CASE-\n");
       loc.moveYto(false);
 
-      // Grab Case
+      // 4) Grab Case
+      Serial.print("4) -GRABBING CASE-\n");
       claw.close();
 
-      // Lift Case
+      // 5) Lift Case
+      Serial.print("5) -LIFTING CASE-\n");
       loc.moveZup(true);
 
-      // Move Back
+      // 6) Move Back
+      Serial.print("6) -MOVING BACK FOR FLIP-\n");
       loc.moveYfor(1000, 127, -1);
 
-      // Move X to Spin POS
+      // 7) Move X to Spin POS
+      Serial.print("7) -MOVING X FOR FLIP-\n");
       loc.moveXto(SPIN_XPOS);
 
-      // Wait for PLL
+      // 8) Wait for PLL
+      Serial.print("8) -WAITING FOR PLL-\n");
       detection.setPalletReady(false);
       while (!detection.getPalletReady()) {
         detection.palletDetect();
       }
 
-      // Move Y to Case & Rotate to 170deg at the same time
+      // 9) Move Y to Case & Rotate to 170deg at the same time
+      Serial.print("9) -FLIPPING-\n");
       loc.flip(true, 170);
 
-      // Move to Middle
+      // 10) Move to Middle
+      Serial.print("10) -MOVING TO MIDDLE X-\n");
       loc.moveXto(MIDDLE_XPOS);
 
-      // Rotate to full 180deg
+      // 11) Rotate to full 180deg
+      Serial.print("11) -ROTATING TO 180-\n");
       loc.rotateZto(180);
 
-      // Move to PLL
+      // 12) Move to PLL
+      Serial.print("12) -MOVING TO PLL Y-\n");
       loc.moveYto(true);
 
-      // Lower Case
+      // 13) Lower Case
+      Serial.print("13) -LOWERING CASE-\n");
       loc.moveZup(false);
 
-      // Drop Case
+      // 14) Drop Case
+      Serial.print("14) -DROPPING CASE-\n");
       claw.open();
 
-      // Raise Claw
+      // 15) Raise Claw
+      Serial.print("15) -RAISING CLAW-\n");
       loc.moveZup(true);
 
-      // Move to Spin POS
+      // 16) Move to Spin POS
+      Serial.print("16) -MOVING TO SPIN X-\n");
       loc.moveXto(SPIN_XPOS);
 
-      // Flip to face case
+      // 17) Flip to face case
+      Serial.print("17) -FLIPPING-\n");
       loc.flip(false, 0);
 
-      // Move to 0 POS
+      // 18) Move to 0 POS
+      Serial.print("18) -MOVING TO X 0-\n");
       loc.moveXto(0);
 
-      // Delay
+      // 19) Delay
+      Serial.print("19) -DELAY FOR 1 SEC-\n");
       delay(1000);
     }
     startingColor = nextColor;
