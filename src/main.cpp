@@ -436,25 +436,7 @@ Detect detection;
 
 /// Main Driver
 void loop() {
-  /// Testing DC, Limit Switches, and Buttons
-
-  //possibleColors runColor = EMPTY_COL;
-
-  // Detect Button Press
-  //runColor = detection.detectPress();
-/*
-  if (runColor == GREEN_COL) {
-    loc.moveYto(true);
-  } else if (runColor == GOLD_COL) {
-    loc.moveYto(false);
-  }
-*/
-  loc.moveZup(false);
-  delay(5000);
-  loc.moveZup(true);
-}
-/*
-possibleColors startingColor = EMPTY_COL;
+  possibleColors startingColor = EMPTY_COL;
   possibleColors nextColor = EMPTY_COL;
   NewPing *caseSonarPtr = NULL;
   double caseXPos = -1;
@@ -530,5 +512,4 @@ possibleColors startingColor = EMPTY_COL;
       loc.rotateZto(0);
     }
     startingColor = nextColor;
-  }
-  */
+}
