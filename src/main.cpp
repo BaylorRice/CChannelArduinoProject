@@ -7,7 +7,6 @@
 
 /// Define component pins
 // Buttons
-// TO DO: Update Button pins
 const int GREEN_START_BTN_PIN = 6;
 const int GOLD_START_BTN_PIN = 5;
 
@@ -37,19 +36,18 @@ const int Z_STEP_IN2 = 36;
 const int Z_STEP_IN3 = 34;
 const int Z_STEP_IN4 = 32;
 // STEPPER CONFIG
-const double MIL_PER_STEP = 0.19;
+const double MIL_PER_STEP = 0.33615;
 const double DEG_PER_STEP = 1.8;
 const int STEPS_PER_REVOLUTION = 200;
 const int SPEED = 200;
 
 // Realspace Locations
-const double GREEN_CASE_XPOS = 9999;  // CHANGE
-const double GOLD_CASE_XPOS = -9999;  // CHANGE
-const double CASE_YPOS = 9999;        // CHANGE
-const double MIDDLE_XPOS = 0;         // CHANGE
+const double GREEN_CASE_XPOS = 0;
+const double GOLD_CASE_XPOS = 11;
+//const double CASE_YPOS = 9999;        
+const double MIDDLE_XPOS = 7.95; 
 
 // Servo Motors
-// TO DO: Update servo pins
 const int SERVO_GRAB_PIN = 9;
 const int SERVO_LIFT_PIN = 10;
 // SERVO CONFIG
@@ -458,6 +456,38 @@ void loop() {
     } else {
       Serial.print("ERROR: Constant Setting -> No constants set");
       // TODO Loop Stop
+      break;
+    }
+
+    for (colorCount = 0; colorCount < 4; colorCount++) {
+      
+    }
+    startingColor = nextColor;
+}
+
+/*
+possibleColors startingColor = EMPTY_COL;
+  possibleColors nextColor = EMPTY_COL;
+  NewPing *caseSonarPtr = NULL;
+  double caseXPos = -1;
+  int colorCount = 0;
+  int runCount = 0;
+
+  // Button Press -> Constants 
+  startingColor = detection.detectPress();
+
+  for (runCount = 0; runCount < 2; runCount++) {
+    if (startingColor == GREEN_COL) {
+      caseSonarPtr = &sonarGreen;
+      caseXPos = GREEN_CASE_XPOS;
+      nextColor = GOLD_COL;
+    } else if (startingColor == GOLD_COL) {
+      caseSonarPtr = &sonarGold;
+      caseXPos = GOLD_CASE_XPOS;
+      nextColor = GREEN_COL;
+    } else {
+      Serial.print("ERROR: Constant Setting -> No constants set");
+      // TODO Loop Stop
     }
 
     for (colorCount = 0; colorCount < 4; colorCount++) {
@@ -512,4 +542,4 @@ void loop() {
       loc.rotateZto(0);
     }
     startingColor = nextColor;
-}
+    */
