@@ -455,11 +455,47 @@ void loop() {
       nextColor = GREEN_COL;
     } else {
       Serial.print("ERROR: Constant Setting -> No constants set");
-      // TODO Loop Stop
       break;
     }
 
     for (colorCount = 0; colorCount < 4; colorCount++) {
+      // Move to Case XPOS
+
+      // Move Forward to Case
+
+      // Grab Case
+
+      // Lift Case
+      
+      // Move Back
+
+      // Move X to Spin POS
+
+      // Move Y to Case & Rotate to 170deg at the same time
+
+      // Move to Middle
+
+      // Rotate to full 180deg
+
+      // Move to PLL
+      
+      // Lower Case
+
+      // Drop Case
+
+      // Raise Claw
+
+      // Move to Spin POS
+
+      // Move to Case
+
+      // Rotate 90 deg
+
+      // Move to not-quite PLL
+
+      // Rotate to 0deg
+
+      // Move to 0 POS
 
     }
     startingColor = nextColor;
