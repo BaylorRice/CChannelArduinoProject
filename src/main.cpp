@@ -46,6 +46,7 @@ const double GREEN_CASE_XPOS = 0;
 const double GOLD_CASE_XPOS = 11;
 // const double CASE_YPOS = 9999;
 const double MIDDLE_XPOS = 7.95;
+const double SPIN_XPOS = 10;
 
 // Servo Motors
 const int SERVO_GRAB_PIN = 9;
@@ -248,6 +249,32 @@ class Location {
     setZRot(zRotIn);
 
     Serial.print("Z Rotated\n");
+  }
+
+  void flip(bool PLL, double angle) {
+    if (PLL) {
+      while ((LIMIT_SWITCH_CASE_PIN != LOW) && (zRot != angle)) {
+        if (LIMIT_SWITCH_CASE_PIN != LOW) {
+          analogWrite(Y_DC_EN, 127);
+          digitalWrite(Y_DC_IN1, HIGH);
+          digitalWrite(Y_DC_IN2, LOW);
+        }
+        if (zRot != angle) {
+          rotateZto(zRot + 1);
+        }
+      }
+    } else if (!PLL) {
+      while ((LIMIT_SWITCH_PLL_PIN != LOW) && (zRot != angle)) {
+        if (LIMIT_SWITCH_PLL_PIN != LOW) {
+          analogWrite(Y_DC_EN, 127);
+          digitalWrite(Y_DC_IN1, HIGH);
+          digitalWrite(Y_DC_IN2, LOW);
+        }
+        if (zRot != angle) {
+          rotateZto(zRot - 1);
+        }
+      }
+    }
   }
 };
 
@@ -460,47 +487,72 @@ void loop() {
 
     for (colorCount = 0; colorCount < 4; colorCount++) {
       // Move to Case XPOS
+      loc.moveXto(caseXPos);
+
+      // Wait for Case
+      detection.setCaseReady(false);
+      while (!detection.getCaseReady()) {
+        detection.caseDetect(caseSonarPtr);
+        delay(15);
+      }
 
       // Move Forward to Case
+      loc.moveYto(false);
 
       // Grab Case
+      claw.close();
 
       // Lift Case
-      
+      loc.moveZup(true);
+
       // Move Back
+      loc.moveYfor(1000, 127, -1);
 
       // Move X to Spin POS
+      loc.moveXto(SPIN_XPOS);
+
+      // Wait for PLL
+      detection.setPalletReady(false);
+      while (!detection.getPalletReady()) {
+        detection.palletDetect();
+      }
 
       // Move Y to Case & Rotate to 170deg at the same time
+      loc.flip(true, 170);
 
       // Move to Middle
+      loc.moveXto(MIDDLE_XPOS);
 
       // Rotate to full 180deg
+      loc.rotateZto(180);
 
       // Move to PLL
-      
+      loc.moveYto(true);
+
       // Lower Case
+      loc.moveZup(false);
 
       // Drop Case
+      claw.open();
 
       // Raise Claw
+      loc.moveZup(true);
 
       // Move to Spin POS
+      loc.moveXto(SPIN_XPOS);
 
-      // Move to Case
-
-      // Rotate 90 deg
-
-      // Move to not-quite PLL
-
-      // Rotate to 0deg
+      // Flip to face case
+      loc.flip(false, 0);
 
       // Move to 0 POS
+      loc.moveXto(0);
 
+      // Delay
+      delay(1000);
     }
     startingColor = nextColor;
   }
-  
+
   /*
   possibleColors startingColor = EMPTY_COL;
     possibleColors nextColor = EMPTY_COL;
