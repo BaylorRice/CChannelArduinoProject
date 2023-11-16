@@ -460,9 +460,11 @@ void loop() {
     }
 
     for (colorCount = 0; colorCount < 4; colorCount++) {
+
     }
     startingColor = nextColor;
   }
+  
   /*
   possibleColors startingColor = EMPTY_COL;
     possibleColors nextColor = EMPTY_COL;
