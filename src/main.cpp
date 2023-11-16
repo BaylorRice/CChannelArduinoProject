@@ -175,10 +175,10 @@ class Location {
     // Wait <time> milliseconds (with limit switch bump stopping)
     for (int i = 0; i < time; i++) {
       delay(1);
-      if (digitalRead(LIMIT_SWITCH_PLL_PIN) == HIGH ||
-          digitalRead(LIMIT_SWITCH_CASE_PIN) == HIGH) {
-        break;
-      }
+      //if (digitalRead(LIMIT_SWITCH_PLL_PIN) == HIGH ||
+      //    digitalRead(LIMIT_SWITCH_CASE_PIN) == HIGH) {
+      //  break;
+      //}
     }
 
     // Stop Motor
@@ -434,7 +434,19 @@ Detect detection;
 
 /// Main Driver
 void loop() {
-  possibleColors startingColor = EMPTY_COL;
+  possibleColors runColor = EMPTY_COL;
+
+  // Detect Button Press
+  runColor = detection.detectPress();
+
+  if (runColor == GREEN_COL) {
+    loc.moveYfor(1000, 127, 1);
+  } else if (runColor == GOLD_COL) {
+    loc.moveYfor(1000, 127, -1);
+  }
+}
+/*
+possibleColors startingColor = EMPTY_COL;
   possibleColors nextColor = EMPTY_COL;
   NewPing *caseSonarPtr = NULL;
   double caseXPos = -1;
@@ -463,8 +475,7 @@ void loop() {
       
     }
     startingColor = nextColor;
-}
-
+*/
 /*
 possibleColors startingColor = EMPTY_COL;
   possibleColors nextColor = EMPTY_COL;
