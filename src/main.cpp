@@ -26,7 +26,7 @@ const int Y_DC_IN1 = 22;
 const int Y_DC_IN2 = 23;
 const int Y_DC_EN = 2;
 
-const int DC_SPEED = 200;
+const int DC_SPEED = 100;
 
 // Stepper motors
 const int X_STEP_IN1 = 33;
@@ -46,16 +46,16 @@ const int ROT_SPEED = 15;
 
 // Realspace Locations
 const double GREEN_CASE_XPOS = 4;
-const double GOLD_CASE_XPOS = 105;
+const double GOLD_CASE_XPOS = 106;
 // const double CASE_YPOS = 9999;
 const double MIDDLE_XPOS = 79.5;
-const double SPIN_XPOS = 100;
+const double SPIN_XPOS = 110;
 
 // Servo Motors
 const int SERVO_GRAB_PIN = 9;
 const int SERVO_LIFT_PIN = 10;
 // SERVO CONFIG
-int SERVO_GRAB_CLOSED_DEG = 180;
+int SERVO_GRAB_CLOSED_DEG = 135;
 int SERVO_GRAB_OPEN_DEG = 0;  // Open deg must be smaller than closed deg
 int SERVO_LIFT_MIN = 50;
 int SERVO_LEFT_MAX = 200;
@@ -260,35 +260,21 @@ class Location {
     double currentZrot = getZRot();
     double moveAngle = currentZrot - zRotIn;
     int moveSteps = moveAngle / DEG_PER_STEP;
-    zStep.step(moveSteps);
+    zStep.step(-1 * moveSteps);
     setZRot(zRotIn);
 
     Serial.print("Z Rotated\n");
   }
 
-  void flip(bool PLL, double angle) {
+  void flip(bool PLL) {
     if (PLL) {
-      while ((LIMIT_SWITCH_CASE_PIN != LOW) && (zRot != angle)) {
-        if (LIMIT_SWITCH_CASE_PIN != LOW) {
-          analogWrite(Y_DC_EN, 127);
-          digitalWrite(Y_DC_IN1, HIGH);
-          digitalWrite(Y_DC_IN2, LOW);
-        }
-        if (zRot != angle) {
-          rotateZto(zRot + 1);
-        }
-      }
+      rotateZto(90);
+      moveYto(false);
+      rotateZto(180);
     } else if (!PLL) {
-      while ((LIMIT_SWITCH_PLL_PIN != LOW) && (zRot != angle)) {
-        if (LIMIT_SWITCH_PLL_PIN != LOW) {
-          analogWrite(Y_DC_EN, 127);
-          digitalWrite(Y_DC_IN1, HIGH);
-          digitalWrite(Y_DC_IN2, LOW);
-        }
-        if (zRot != angle) {
-          rotateZto(zRot - 1);
-        }
-      }
+      rotateZto(90);
+      moveYto(true);
+      rotateZto(0);
     }
   }
 };
@@ -415,11 +401,14 @@ class Detect {
     int time, distance;
     time = sonarPLL.ping_median(NUM_PINGS);
     distance = sonarPLL.convert_cm(time);
+    Serial.print("Distance = ");
+    Serial.print(distance);
+    Serial.print("\n");
     // FIXME need correct distance range
-    if (distance < 10 && distance > 5) {
-      setPalletReady(true);
-    } else {
+    if (distance < 3) {
       setPalletReady(false);
+    } else {
+      setPalletReady(true);
     }
   }
   possibleColors detectPress() {
@@ -474,10 +463,15 @@ void setup() {
   // Servos
   gServo.attach(SERVO_GRAB_PIN);
   zServo.attach(SERVO_LIFT_PIN);
-  loc.moveYfor(250, 200, false);
 }
 
-void loop() {}
+void loop() {
+  Serial.print("8) -WAITING FOR PLL-\n");
+  detection.setPalletReady(false);
+  while (!detection.getPalletReady()) {
+    detection.palletDetect();
+  }
+}
 
 #endif  // TEST
 
@@ -567,7 +561,7 @@ void loop() {
 
       // 6) Move Back
       Serial.print("6) -MOVING BACK FOR FLIP-\n");
-      loc.moveYfor(1000, 127, true);
+      loc.moveYto(true);
 
       // 7) Move X to Spin POS
       Serial.print("7) -MOVING X FOR FLIP-\n");
@@ -582,19 +576,15 @@ void loop() {
 
       // 9) Move Y to Case & Rotate to 170deg at the same time
       Serial.print("9) -FLIPPING-\n");
-      loc.flip(true, 170);
+      loc.flip(true);
 
       // 10) Move to Middle
       Serial.print("10) -MOVING TO MIDDLE X-\n");
       loc.moveXto(MIDDLE_XPOS);
 
-      // 11) Rotate to full 180deg
-      Serial.print("11) -ROTATING TO 180-\n");
-      loc.rotateZto(180);
-
       // 12) Move to PLL
       Serial.print("12) -MOVING TO PLL Y-\n");
-      loc.moveYto(true);
+      loc.moveYfor(400, 120, true);
 
       // 13) Lower Case
       Serial.print("13) -LOWERING CASE-\n");
@@ -614,11 +604,15 @@ void loop() {
 
       // 17) Flip to face case
       Serial.print("17) -FLIPPING-\n");
-      loc.flip(false, 0);
+      loc.flip(false);
 
       // 18) Move to 0 POS
       Serial.print("18) -MOVING TO X 0-\n");
       loc.moveXto(0);
+
+      // 18a) Move Down
+      Serial.print("18) -MOVING TO X 0-\n");
+      loc.moveZup(false);
 
       // 19) Delay
       Serial.print("19) -DELAY FOR 1 SEC-\n");
