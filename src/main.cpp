@@ -26,6 +26,8 @@ const int Y_DC_IN1 = 22;
 const int Y_DC_IN2 = 23;
 const int Y_DC_EN = 2;
 
+const int DC_SPEED = 200;
+
 // Stepper motors
 const int X_STEP_IN1 = 33;
 const int X_STEP_IN2 = 35;
@@ -40,11 +42,11 @@ const double STEP_PER_MIL = 1 / 0.33615;
 const double DEG_PER_STEP = 1.8;
 const int STEPS_PER_REVOLUTION = 200;
 const int SPEED = 100;
-const int ROT_SPEED = 10;
+const int ROT_SPEED = 15;
 
 // Realspace Locations
 const double GREEN_CASE_XPOS = 4;
-const double GOLD_CASE_XPOS = 115;
+const double GOLD_CASE_XPOS = 105;
 // const double CASE_YPOS = 9999;
 const double MIDDLE_XPOS = 79.5;
 const double SPIN_XPOS = 100;
@@ -151,7 +153,7 @@ class Location {
     Serial.print("X Moved\n");
   }
 
-  void moveYfor(int time, int speed, int dir) {
+  void moveYfor(int time, int speed, bool dirPLL) {
     Serial.print("Moving Y for -> ");
     Serial.print(time);
     Serial.print(" milliseconds\n");
@@ -167,25 +169,29 @@ class Location {
     analogWrite(Y_DC_EN, speed);
 
     // Start Motor with speed and direction
-    if (dir > 0) {
+    if (dirPLL == true) {
       // Move Towards PLL
       digitalWrite(Y_DC_IN1, HIGH);
       digitalWrite(Y_DC_IN2, LOW);
+
+      for (int i = 0; i < time; i++) {
+        delay(1);
+        if (digitalRead(LIMIT_SWITCH_PLL_PIN) == LOW) {
+          break;
+        }
+      }
     } else {
       // Move away from PLL
       digitalWrite(Y_DC_IN1, LOW);
       digitalWrite(Y_DC_IN2, HIGH);
-    }
 
-    // Wait <time> milliseconds (with limit switch bump stopping)
-    for (int i = 0; i < time; i++) {
-      delay(1);
-      // if (digitalRead(LIMIT_SWITCH_PLL_PIN) == HIGH ||
-      //     digitalRead(LIMIT_SWITCH_CASE_PIN) == HIGH) {
-      //   break;
-      // }
+      for (int i = 0; i < time; i++) {
+        delay(1);
+        if (digitalRead(LIMIT_SWITCH_CASE_PIN) == LOW) {
+          break;
+        }
+      }
     }
-
     // Stop Motor
     digitalWrite(Y_DC_IN1, LOW);
     digitalWrite(Y_DC_IN2, LOW);
@@ -193,7 +199,7 @@ class Location {
     // TODO: Update yPos to reflect movement (may not be possible)
     // setYPos(getYPos() + calculated delta)
 
-    analogWrite(Y_DC_EN, 255);
+    analogWrite(Y_DC_EN, DC_SPEED);
     Serial.print("Moved Y\n");
   }
   void moveYto(bool PLL) {
@@ -443,6 +449,40 @@ Location loc;
 Claw claw;
 Detect detection;
 
+// #define TEST
+#define PROD
+
+#ifdef TEST
+
+void setup() {
+  Serial.begin(9600);
+  // Buttons
+  btnList.begin();
+  pinMode(LIMIT_SWITCH_CASE_PIN, INPUT_PULLUP);
+  pinMode(LIMIT_SWITCH_PLL_PIN, INPUT_PULLUP);
+  // DC Motor
+  pinMode(Y_DC_IN1, OUTPUT);
+  pinMode(Y_DC_IN2, OUTPUT);
+  pinMode(Y_DC_EN, OUTPUT);
+  digitalWrite(Y_DC_IN1, LOW);
+  digitalWrite(Y_DC_IN2, LOW);
+  digitalWrite(Y_DC_EN, LOW);
+  analogWrite(Y_DC_EN, 100);
+  // Steppers
+  xStep.setSpeed(SPEED);
+  zStep.setSpeed(ROT_SPEED);
+  // Servos
+  gServo.attach(SERVO_GRAB_PIN);
+  zServo.attach(SERVO_LIFT_PIN);
+  loc.moveYfor(250, 200, false);
+}
+
+void loop() {}
+
+#endif  // TEST
+
+#ifdef PROD
+
 /// Setup
 void setup() {
   Serial.begin(9600);
@@ -457,7 +497,7 @@ void setup() {
   digitalWrite(Y_DC_IN1, LOW);
   digitalWrite(Y_DC_IN2, LOW);
   digitalWrite(Y_DC_EN, LOW);
-  analogWrite(Y_DC_EN, 255);
+  analogWrite(Y_DC_EN, DC_SPEED);
   // Steppers
   xStep.setSpeed(SPEED);
   zStep.setSpeed(ROT_SPEED);
@@ -465,6 +505,8 @@ void setup() {
   gServo.attach(SERVO_GRAB_PIN);
   claw.open();
   zServo.attach(SERVO_LIFT_PIN);
+  loc.moveYto(true);
+  delay(1000);
   loc.moveZup(false);
   zStep.step(-10);
   delay(10);
@@ -525,7 +567,7 @@ void loop() {
 
       // 6) Move Back
       Serial.print("6) -MOVING BACK FOR FLIP-\n");
-      loc.moveYfor(1500, 127, 1);
+      loc.moveYfor(1000, 127, true);
 
       // 7) Move X to Spin POS
       Serial.print("7) -MOVING X FOR FLIP-\n");
@@ -585,6 +627,8 @@ void loop() {
     startingColor = nextColor;
   }
 }
+
+#endif  // PROD
 
 /// Old Logic Flow
 /*
