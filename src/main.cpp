@@ -36,17 +36,18 @@ const int Z_STEP_IN2 = 36;
 const int Z_STEP_IN3 = 34;
 const int Z_STEP_IN4 = 32;
 // STEPPER CONFIG
-const double MIL_PER_STEP = 0.33615;
+const double STEP_PER_MIL = 1 / 0.33615;
 const double DEG_PER_STEP = 1.8;
 const int STEPS_PER_REVOLUTION = 200;
-const int SPEED = 200;
+const int SPEED = 100;
+const int ROT_SPEED = 10;
 
 // Realspace Locations
-const double GREEN_CASE_XPOS = 0;
-const double GOLD_CASE_XPOS = 11;
+const double GREEN_CASE_XPOS = 4;
+const double GOLD_CASE_XPOS = 115;
 // const double CASE_YPOS = 9999;
-const double MIDDLE_XPOS = 7.95;
-const double SPIN_XPOS = 10;
+const double MIDDLE_XPOS = 79.5;
+const double SPIN_XPOS = 100;
 
 // Servo Motors
 const int SERVO_GRAB_PIN = 9;
@@ -54,8 +55,8 @@ const int SERVO_LIFT_PIN = 10;
 // SERVO CONFIG
 int SERVO_GRAB_CLOSED_DEG = 180;
 int SERVO_GRAB_OPEN_DEG = 0;  // Open deg must be smaller than closed deg
-int SERVO_LIFT_MIN = 0;
-int SERVO_LEFT_MAX = 180;
+int SERVO_LIFT_MIN = 50;
+int SERVO_LEFT_MAX = 200;
 
 // Limit Switchs
 // TO DO: Update limit switch pins
@@ -140,8 +141,11 @@ class Location {
     Serial.print("\n");
 
     double distanceMoved = xIn - getXPos();
-    int stepsToMove = distanceMoved / MIL_PER_STEP;
-    xStep.step(stepsToMove);
+    int stepsToMove = distanceMoved * STEP_PER_MIL;
+    Serial.print("Steps Moved ->");
+    Serial.print(stepsToMove);
+    Serial.print("\n");
+    xStep.step(-1 * stepsToMove);
     setXPos(xIn);
 
     Serial.print("X Moved\n");
@@ -232,9 +236,13 @@ class Location {
     Serial.print("\n");
 
     // TODO Update degree values and delay
-    zServo.write(180 * !up);
-    delay(1000);
-    setZUp(up);
+    if (up) {
+      zServo.write(SERVO_LEFT_MAX);
+      delay(2000);
+    } else {
+      zServo.write(SERVO_LIFT_MIN);
+      delay(2000);
+    }
 
     Serial.print("Z moved\n");
   }
@@ -430,6 +438,11 @@ class Detect {
   }
 };
 
+// Other Class Definitions
+Location loc;
+Claw claw;
+Detect detection;
+
 /// Setup
 void setup() {
   Serial.begin(9600);
@@ -447,18 +460,17 @@ void setup() {
   analogWrite(Y_DC_EN, 255);
   // Steppers
   xStep.setSpeed(SPEED);
-  zStep.setSpeed(SPEED);
+  zStep.setSpeed(ROT_SPEED);
   // Servos
   gServo.attach(SERVO_GRAB_PIN);
-  gServo.write(SERVO_GRAB_CLOSED_DEG);
+  claw.open();
   zServo.attach(SERVO_LIFT_PIN);
-  zServo.write(SERVO_LIFT_MIN);
+  loc.moveZup(false);
+  zStep.step(-10);
+  delay(10);
+  zStep.step(10);
+  delay(10);
 }
-
-// Other Class Definitions
-Location loc;
-Claw claw;
-Detect detection;
 
 /// Main Driver
 void loop() {
@@ -513,7 +525,7 @@ void loop() {
 
       // 6) Move Back
       Serial.print("6) -MOVING BACK FOR FLIP-\n");
-      loc.moveYfor(1000, 127, -1);
+      loc.moveYfor(1500, 127, 1);
 
       // 7) Move X to Spin POS
       Serial.print("7) -MOVING X FOR FLIP-\n");
