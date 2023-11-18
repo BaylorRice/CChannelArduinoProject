@@ -438,7 +438,7 @@ Location loc;
 Claw claw;
 Detect detection;
 
-// #define TEST
+//#define TEST
 #define PROD
 
 #ifdef TEST
@@ -463,14 +463,12 @@ void setup() {
   // Servos
   gServo.attach(SERVO_GRAB_PIN);
   zServo.attach(SERVO_LIFT_PIN);
+  claw.open();
+  delay(5000);
+  claw.close();
 }
 
 void loop() {
-  Serial.print("8) -WAITING FOR PLL-\n");
-  detection.setPalletReady(false);
-  while (!detection.getPalletReady()) {
-    detection.palletDetect();
-  }
 }
 
 #endif  // TEST
