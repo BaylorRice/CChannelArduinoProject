@@ -38,7 +38,7 @@ const int Z_STEP_IN2 = 36;
 const int Z_STEP_IN3 = 34;
 const int Z_STEP_IN4 = 32;
 // STEPPER CONFIG
-const double STEP_PER_MIL = 1 / 0.33615;
+const double STEP_PER_MIL = 2.975;
 const double DEG_PER_STEP = 1.8;
 const int STEPS_PER_REVOLUTION = 200;
 const int SPEED = 100;
@@ -48,14 +48,14 @@ const int ROT_SPEED = 15;
 const double GREEN_CASE_XPOS = 0;
 const double GOLD_CASE_XPOS = 106;
 // const double CASE_YPOS = 9999;
-const double MIDDLE_XPOS = 79.5;
+const double MIDDLE_XPOS = 77;
 const double SPIN_XPOS = 110;
 
 // Servo Motors
 const int SERVO_GRAB_PIN = 9;
 const int SERVO_LIFT_PIN = 10;
 // SERVO CONFIG
-int SERVO_GRAB_CLOSED_DEG = 135;
+int SERVO_GRAB_CLOSED_DEG = 180;
 int SERVO_GRAB_OPEN_DEG = 0;  // Open deg must be smaller than closed deg
 int SERVO_LIFT_MIN = 50;
 int SERVO_LEFT_MAX = 200;
@@ -270,7 +270,7 @@ class Location {
     if (PLL) {
       rotateZto(90);
       moveYto(false);
-      rotateZto(180);
+      rotateZto(171);
     } else if (!PLL) {
       rotateZto(90);
       moveYto(true);
@@ -582,6 +582,10 @@ void loop() {
       Serial.print("10) -MOVING TO MIDDLE X-\n");
       loc.moveXto(MIDDLE_XPOS);
 
+      // 11) Finish Spin
+      Serial.print("11) -ALIGNING TO PLL");
+      loc.rotateZto(180);
+
       // 12) Move to PLL
       Serial.print("12) -MOVING TO PLL Y-\n");
       loc.moveYfor(400, 120, true);
@@ -601,6 +605,7 @@ void loop() {
       // 16) Move to Spin POS
       Serial.print("16) -MOVING TO SPIN X-\n");
       loc.moveXto(SPIN_XPOS);
+      loc.moveYto(false);
 
       // 17) Flip to face case
       Serial.print("17) -FLIPPING-\n");
@@ -610,13 +615,10 @@ void loop() {
       Serial.print("18) -MOVING TO X 0-\n");
       loc.moveXto(0);
 
-      // 18a) Move Down
-      Serial.print("18) -MOVING TO X 0-\n");
+      // 19) Move Down
+      Serial.print("19) -MOVE CLAW DOWN-\n");
       loc.moveZup(false);
 
-      // 19) Delay
-      Serial.print("19) -DELAY FOR 1 SEC-\n");
-      delay(1000);
     }
     startingColor = nextColor;
   }
