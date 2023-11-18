@@ -532,6 +532,9 @@ void loop() {
       break;
     }
 
+    // Zero X Movement
+    loc.moveXto(0);
+
     for (colorCount = 0; colorCount < 4; colorCount++) {
       // 1) Move to Case XPOS
       Serial.print("1) -MOVING TO CASE XPOS-\n");
@@ -610,8 +613,8 @@ void loop() {
       loc.flip(false);
 
       // 18) Move to 0 POS
-      Serial.print("18) -MOVING TO X 0-\n");
-      loc.moveXto(0);
+      Serial.print("18) -MOVING TO X CasePos-\n");
+      loc.moveXto(caseXPos);
 
       // 19) Move Down
       Serial.print("19) -MOVE CLAW DOWN-\n");
