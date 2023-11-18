@@ -45,7 +45,7 @@ const int SPEED = 100;
 const int ROT_SPEED = 15;
 
 // Realspace Locations
-const double GREEN_CASE_XPOS = 4;
+const double GREEN_CASE_XPOS = 0;
 const double GOLD_CASE_XPOS = 106;
 // const double CASE_YPOS = 9999;
 const double MIDDLE_XPOS = 79.5;
