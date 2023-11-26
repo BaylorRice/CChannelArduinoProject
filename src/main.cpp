@@ -6,7 +6,7 @@
 #include <Stepper.h>
 
 // Logic Flow Definitions
-//#define SPIN_TOWARDS_GOLD
+// #define SPIN_TOWARDS_GOLD
 #define SPIN_TOWARDS_GREEN
 
 /// Define component pins
@@ -49,12 +49,12 @@ const int SPEED = 100;
 const int ROT_SPEED = 15;
 
 #ifdef SPIN_TOWARDS_GREEN
-const int SPIN_DIR = 1;
-#endif //SPIN_TOWARDS_GREEN
+const int SPIN_DIR = -1;
+#endif  // SPIN_TOWARDS_GREEN
 
 #ifdef SPIN_TOWARDS_GOLD
-const int SPIN_DIR = -1;
-#endif //SPIN_TOWARDS_GOLD
+const int SPIN_DIR = 1;
+#endif  // SPIN_TOWARDS_GOLD
 
 // Realspace Locations
 const double GREEN_CASE_XPOS = 0;
@@ -64,11 +64,11 @@ const double MIDDLE_XPOS = 77;
 
 #ifdef SPIN_TOWARDS_GREEN
 const double SPIN_XPOS = 110;
-#endif //SPIN_TOWARDS_GREEN
+#endif  // SPIN_TOWARDS_GREEN
 
 #ifdef SPIN_TOWARDS_GOLD
 const double SPIN_XPOS = 10;
-#endif //SPIN_TOWARDS_GOLD
+#endif  // SPIN_TOWARDS_GOLD
 
 // Servo Motors
 const int SERVO_GRAB_PIN = 9;
@@ -279,13 +279,14 @@ class Location {
     double currentZrot = getZRot();
     double moveAngle = currentZrot - zRotIn;
     int moveSteps = moveAngle / DEG_PER_STEP;
-    zStep.step(-1 * moveSteps);
+    zStep.step(SPIN_DIR * moveSteps);
     setZRot(zRotIn);
 
     Serial.print("Z Rotated\n");
   }
 
   void flip(bool PLL) {
+    loc.moveXto(SPIN_XPOS);
     if (PLL) {
       rotateZto(90);
       moveYto(false);
@@ -457,7 +458,7 @@ Location loc;
 Claw claw;
 Detect detection;
 
-//#define TEST
+// #define TEST
 #define PROD
 
 #ifdef TEST
@@ -487,8 +488,7 @@ void setup() {
   claw.close();
 }
 
-void loop() {
-}
+void loop() {}
 
 #endif  // TEST
 
@@ -583,10 +583,6 @@ void loop() {
       Serial.print("6) -MOVING BACK FOR FLIP-\n");
       loc.moveYto(true);
 
-      // 7) Move X to Spin POS
-      Serial.print("7) -MOVING X FOR FLIP-\n");
-      loc.moveXto(SPIN_XPOS);
-
       // 8) Wait for PLL
       Serial.print("8) -WAITING FOR PLL-\n");
       detection.setPalletReady(false);
@@ -594,7 +590,7 @@ void loop() {
         detection.palletDetect();
       }
 
-      // 9) Move Y to Case & Rotate to 170deg at the same time
+      // 9) Move Y to Case & Rotate to 171deg at the same time
       Serial.print("9) -FLIPPING-\n");
       loc.flip(true);
 
@@ -638,7 +634,6 @@ void loop() {
       // 19) Move Down
       Serial.print("19) -MOVE CLAW DOWN-\n");
       loc.moveZup(false);
-
     }
     startingColor = nextColor;
   }
