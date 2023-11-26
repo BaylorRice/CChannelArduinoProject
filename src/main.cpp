@@ -5,6 +5,10 @@
 #include <Servo.h>
 #include <Stepper.h>
 
+// Logic Flow Definitions
+//#define SPIN_TOWARDS_GOLD
+#define SPIN_TOWARDS_GREEN
+
 /// Define component pins
 // Buttons
 const int GREEN_START_BTN_PIN = 11;
@@ -49,7 +53,14 @@ const double GREEN_CASE_XPOS = 0;
 const double GOLD_CASE_XPOS = 106;
 // const double CASE_YPOS = 9999;
 const double MIDDLE_XPOS = 77;
+
+#ifdef SPIN_TOWARDS_GREEN
 const double SPIN_XPOS = 110;
+#endif //SPIN_TOWARDS_GREEN
+
+#ifdef SPIN_TOWARDS_GOLD
+const double SPIN_XPOS = 10;
+#endif //SPIN_TOWARDS_GOLD
 
 // Servo Motors
 const int SERVO_GRAB_PIN = 9;
