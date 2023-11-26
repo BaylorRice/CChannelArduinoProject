@@ -48,6 +48,14 @@ const int STEPS_PER_REVOLUTION = 200;
 const int SPEED = 100;
 const int ROT_SPEED = 15;
 
+#ifdef SPIN_TOWARDS_GREEN
+const int SPIN_DIR = 1;
+#endif //SPIN_TOWARDS_GREEN
+
+#ifdef SPIN_TOWARDS_GOLD
+const int SPIN_DIR = -1;
+#endif //SPIN_TOWARDS_GOLD
+
 // Realspace Locations
 const double GREEN_CASE_XPOS = 0;
 const double GOLD_CASE_XPOS = 106;
