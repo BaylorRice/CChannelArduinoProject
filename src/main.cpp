@@ -46,7 +46,7 @@ const int ROT_SPEED = 15;
 
 // Realspace Locations
 const double GREEN_CASE_XPOS = 0;
-const double GOLD_CASE_XPOS = 106;
+const double GOLD_CASE_XPOS = 110;
 // const double CASE_YPOS = 9999;
 const double MIDDLE_XPOS = 77;
 const double SPIN_XPOS = 110;
@@ -405,7 +405,7 @@ class Detect {
     Serial.print(distance);
     Serial.print("\n");
     // FIXME need correct distance range
-    if (distance < 3) {
+    if (distance < 4) {
       setPalletReady(false);
     } else {
       setPalletReady(true);
