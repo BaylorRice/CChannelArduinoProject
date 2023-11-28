@@ -6,8 +6,8 @@
 #include <Stepper.h>
 
 // Logic Flow Definitions
-#define SPIN_TOWARDS_GOLD
-//#define SPIN_TOWARDS_GREEN
+//#define SPIN_TOWARDS_GOLD
+#define SPIN_TOWARDS_GREEN
 
 /// Define component pins
 // Buttons
@@ -58,7 +58,7 @@ const int SPIN_DIR = 1;
 
 // Realspace Locations
 const double GREEN_CASE_XPOS = 0;
-const double GOLD_CASE_XPOS = 106;
+const double GOLD_CASE_XPOS = 110;
 // const double CASE_YPOS = 9999;
 const double MIDDLE_XPOS = 77;
 
@@ -67,7 +67,7 @@ const double SPIN_XPOS = 110;
 #endif  // SPIN_TOWARDS_GREEN
 
 #ifdef SPIN_TOWARDS_GOLD
-const double SPIN_XPOS = 10;
+const double SPIN_XPOS = 18;
 #endif  // SPIN_TOWARDS_GOLD
 
 // Servo Motors
@@ -287,14 +287,20 @@ class Location {
 
   #ifdef SPIN_TOWARDS_GOLD
   void flip(bool PLL) {
-    moveXto(SPIN_XPOS);
     if (PLL) {
+      moveXto(SPIN_XPOS);
       moveYfor(500,100,false);
-      rotateZto(55);
+      rotateZto(45);
+      moveYfor(500,100,false);
+      rotateZto(90);
       moveYto(false);
       rotateZto(171);
     } else if (!PLL) {
+      moveXto(SPIN_XPOS+10);
+      moveYto(false);
       rotateZto(90);
+      moveYfor(500,125,true);
+      rotateZto(30);
       moveYto(true);
       rotateZto(0);
     }
@@ -443,7 +449,7 @@ class Detect {
     Serial.print(distance);
     Serial.print("\n");
     // FIXME need correct distance range
-    if (distance < 3) {
+    if (distance < 4) {
       setPalletReady(false);
     } else {
       setPalletReady(true);
@@ -617,7 +623,7 @@ void loop() {
       loc.moveXto(MIDDLE_XPOS);
 
       // 11) Finish Spin
-      Serial.print("11) -ALIGNING TO PLL");
+      Serial.print("11) -ALIGNING TO PLL-\n");
       loc.rotateZto(180);
 
       // 12) Move to PLL
@@ -635,11 +641,6 @@ void loop() {
       // 15) Raise Claw
       Serial.print("15) -RAISING CLAW-\n");
       loc.moveZup(true);
-
-      // 16) Move to Spin POS
-      Serial.print("16) -MOVING TO SPIN X-\n");
-      loc.moveXto(SPIN_XPOS);
-      loc.moveYto(false);
 
       // 17) Flip to face case
       Serial.print("17) -FLIPPING-\n");
