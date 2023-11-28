@@ -45,8 +45,8 @@ const int SPEED = 100;
 const int ROT_SPEED = 15;
 
 // Realspace Locations
-const double GREEN_CASE_XPOS = 3;
-const double GOLD_CASE_XPOS = 111;
+const double GREEN_CASE_XPOS = 0;
+const double GOLD_CASE_XPOS = 109;
 // const double CASE_YPOS = 9999;
 const double MIDDLE_XPOS = 78;
 const double SPIN_XPOS = 110;
@@ -613,6 +613,7 @@ void loop() {
       loc.flip(false);
 
       // 18) Move to 0 POS
+      delay(100);
       Serial.print("18) -MOVING TO X CasePos-\n");
       loc.moveXto(caseXPos);
 
