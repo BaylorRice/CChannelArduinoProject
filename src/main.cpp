@@ -286,7 +286,7 @@ class Location {
   }
 
   void flip(bool PLL) {
-    loc.moveXto(SPIN_XPOS);
+    moveXto(SPIN_XPOS);
     if (PLL) {
       rotateZto(90);
       moveYto(false);
