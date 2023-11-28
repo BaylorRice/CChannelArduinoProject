@@ -45,17 +45,17 @@ const int SPEED = 100;
 const int ROT_SPEED = 15;
 
 // Realspace Locations
-const double GREEN_CASE_XPOS = 0;
-const double GOLD_CASE_XPOS = 110;
+const double GREEN_CASE_XPOS = 3;
+const double GOLD_CASE_XPOS = 112;
 // const double CASE_YPOS = 9999;
-const double MIDDLE_XPOS = 77;
+const double MIDDLE_XPOS = 78;
 const double SPIN_XPOS = 110;
 
 // Servo Motors
 const int SERVO_GRAB_PIN = 9;
 const int SERVO_LIFT_PIN = 10;
 // SERVO CONFIG
-int SERVO_GRAB_CLOSED_DEG = 180;
+int SERVO_GRAB_CLOSED_DEG = 90;
 int SERVO_GRAB_OPEN_DEG = 0;  // Open deg must be smaller than closed deg
 int SERVO_LIFT_MIN = 50;
 int SERVO_LEFT_MAX = 200;
@@ -463,12 +463,11 @@ void setup() {
   // Servos
   gServo.attach(SERVO_GRAB_PIN);
   zServo.attach(SERVO_LIFT_PIN);
-  claw.open();
-  delay(5000);
-  claw.close();
+  loc.moveXto(GOLD_CASE_XPOS);
 }
 
 void loop() {
+  Serial.print("Hi\n");
 }
 
 #endif  // TEST
@@ -584,7 +583,7 @@ void loop() {
       loc.moveXto(MIDDLE_XPOS);
 
       // 11) Finish Spin
-      Serial.print("11) -ALIGNING TO PLL");
+      Serial.print("11) -ALIGNING TO PLL-\n");
       loc.rotateZto(180);
 
       // 12) Move to PLL
