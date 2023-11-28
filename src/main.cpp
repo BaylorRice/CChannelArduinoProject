@@ -6,8 +6,8 @@
 #include <Stepper.h>
 
 // Logic Flow Definitions
-// #define SPIN_TOWARDS_GOLD
-#define SPIN_TOWARDS_GREEN
+#define SPIN_TOWARDS_GOLD
+//#define SPIN_TOWARDS_GREEN
 
 /// Define component pins
 // Buttons
@@ -285,6 +285,23 @@ class Location {
     Serial.print("Z Rotated\n");
   }
 
+  #ifdef SPIN_TOWARDS_GOLD
+  void flip(bool PLL) {
+    moveXto(SPIN_XPOS);
+    if (PLL) {
+      moveYfor(500,100,false);
+      rotateZto(55);
+      moveYto(false);
+      rotateZto(171);
+    } else if (!PLL) {
+      rotateZto(90);
+      moveYto(true);
+      rotateZto(0);
+    }
+  }
+  #endif //SPIN_TOWARDS_GOLD
+
+  #ifdef SPIN_TOWARDS_GREEN
   void flip(bool PLL) {
     moveXto(SPIN_XPOS);
     if (PLL) {
@@ -297,6 +314,7 @@ class Location {
       rotateZto(0);
     }
   }
+  #endif //SPIN_TOWARDS_GREEN
 };
 
 class Claw {
@@ -458,7 +476,7 @@ Location loc;
 Claw claw;
 Detect detection;
 
-// #define TEST
+//#define TEST
 #define PROD
 
 #ifdef TEST
