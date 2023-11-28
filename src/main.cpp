@@ -1,13 +1,11 @@
+// Test Line - Please Remove
+
 /// Constants
 #include <AbleButtons.h>
 #include <Arduino.h>
 #include <NewPing.h>
 #include <Servo.h>
 #include <Stepper.h>
-
-// Logic Flow Definitions
-//#define SPIN_TOWARDS_GOLD
-#define SPIN_TOWARDS_GREEN
 
 /// Define component pins
 // Buttons
@@ -48,27 +46,12 @@ const int STEPS_PER_REVOLUTION = 200;
 const int SPEED = 100;
 const int ROT_SPEED = 15;
 
-#ifdef SPIN_TOWARDS_GREEN
-const int SPIN_DIR = -1;
-#endif  // SPIN_TOWARDS_GREEN
-
-#ifdef SPIN_TOWARDS_GOLD
-const int SPIN_DIR = 1;
-#endif  // SPIN_TOWARDS_GOLD
-
 // Realspace Locations
 const double GREEN_CASE_XPOS = 0;
-const double GOLD_CASE_XPOS = 110;
+const double GOLD_CASE_XPOS = 106;
 // const double CASE_YPOS = 9999;
 const double MIDDLE_XPOS = 77;
-
-#ifdef SPIN_TOWARDS_GREEN
 const double SPIN_XPOS = 110;
-#endif  // SPIN_TOWARDS_GREEN
-
-#ifdef SPIN_TOWARDS_GOLD
-const double SPIN_XPOS = 18;
-#endif  // SPIN_TOWARDS_GOLD
 
 // Servo Motors
 const int SERVO_GRAB_PIN = 9;
@@ -279,37 +262,13 @@ class Location {
     double currentZrot = getZRot();
     double moveAngle = currentZrot - zRotIn;
     int moveSteps = moveAngle / DEG_PER_STEP;
-    zStep.step(SPIN_DIR * moveSteps);
+    zStep.step(-1 * moveSteps);
     setZRot(zRotIn);
 
     Serial.print("Z Rotated\n");
   }
 
-  #ifdef SPIN_TOWARDS_GOLD
   void flip(bool PLL) {
-    if (PLL) {
-      moveXto(SPIN_XPOS);
-      moveYfor(500,100,false);
-      rotateZto(45);
-      moveYfor(500,100,false);
-      rotateZto(90);
-      moveYto(false);
-      rotateZto(171);
-    } else if (!PLL) {
-      moveXto(SPIN_XPOS+10);
-      moveYto(false);
-      rotateZto(90);
-      moveYfor(500,125,true);
-      rotateZto(30);
-      moveYto(true);
-      rotateZto(0);
-    }
-  }
-  #endif //SPIN_TOWARDS_GOLD
-
-  #ifdef SPIN_TOWARDS_GREEN
-  void flip(bool PLL) {
-    moveXto(SPIN_XPOS);
     if (PLL) {
       rotateZto(90);
       moveYto(false);
@@ -320,7 +279,6 @@ class Location {
       rotateZto(0);
     }
   }
-  #endif //SPIN_TOWARDS_GREEN
 };
 
 class Claw {
@@ -449,7 +407,7 @@ class Detect {
     Serial.print(distance);
     Serial.print("\n");
     // FIXME need correct distance range
-    if (distance < 4) {
+    if (distance < 3) {
       setPalletReady(false);
     } else {
       setPalletReady(true);
@@ -512,7 +470,8 @@ void setup() {
   claw.close();
 }
 
-void loop() {}
+void loop() {
+}
 
 #endif  // TEST
 
@@ -607,6 +566,10 @@ void loop() {
       Serial.print("6) -MOVING BACK FOR FLIP-\n");
       loc.moveYto(true);
 
+      // 7) Move X to Spin POS
+      Serial.print("7) -MOVING X FOR FLIP-\n");
+      loc.moveXto(SPIN_XPOS);
+
       // 8) Wait for PLL
       Serial.print("8) -WAITING FOR PLL-\n");
       detection.setPalletReady(false);
@@ -614,7 +577,7 @@ void loop() {
         detection.palletDetect();
       }
 
-      // 9) Move Y to Case & Rotate to 171deg at the same time
+      // 9) Move Y to Case & Rotate to 170deg at the same time
       Serial.print("9) -FLIPPING-\n");
       loc.flip(true);
 
@@ -623,7 +586,7 @@ void loop() {
       loc.moveXto(MIDDLE_XPOS);
 
       // 11) Finish Spin
-      Serial.print("11) -ALIGNING TO PLL-\n");
+      Serial.print("11) -ALIGNING TO PLL");
       loc.rotateZto(180);
 
       // 12) Move to PLL
@@ -642,6 +605,11 @@ void loop() {
       Serial.print("15) -RAISING CLAW-\n");
       loc.moveZup(true);
 
+      // 16) Move to Spin POS
+      Serial.print("16) -MOVING TO SPIN X-\n");
+      loc.moveXto(SPIN_XPOS);
+      loc.moveYto(false);
+
       // 17) Flip to face case
       Serial.print("17) -FLIPPING-\n");
       loc.flip(false);
@@ -653,6 +621,7 @@ void loop() {
       // 19) Move Down
       Serial.print("19) -MOVE CLAW DOWN-\n");
       loc.moveZup(false);
+
     }
     startingColor = nextColor;
   }
