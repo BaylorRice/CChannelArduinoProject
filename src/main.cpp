@@ -46,7 +46,7 @@ const int ROT_SPEED = 15;
 
 // Realspace Locations
 const double GREEN_CASE_XPOS = 3;
-const double GOLD_CASE_XPOS = 112;
+const double GOLD_CASE_XPOS = 111;
 // const double CASE_YPOS = 9999;
 const double MIDDLE_XPOS = 78;
 const double SPIN_XPOS = 110;
@@ -316,7 +316,7 @@ class Claw {
       Serial.print("GrabServo - Opening\n");
       for (int pos = SERVO_GRAB_CLOSED_DEG; pos >= SERVO_GRAB_OPEN_DEG; pos--) {
         gServo.write(pos);
-        delay(15);
+        delay(3);
       }
       setGrab(false);
       Serial.print("GrabServo -> OPEN\n");
@@ -332,7 +332,7 @@ class Claw {
       Serial.print("GrabServo - Closing\n");
       for (int pos = SERVO_GRAB_OPEN_DEG; pos <= SERVO_GRAB_CLOSED_DEG; pos++) {
         gServo.write(pos);
-        delay(15);
+        delay(3);
       }
       setGrab(true);
       Serial.print("GrabServo -> CLOSED\n");
@@ -583,12 +583,13 @@ void loop() {
       loc.moveXto(MIDDLE_XPOS);
 
       // 11) Finish Spin
+      delay(100);
       Serial.print("11) -ALIGNING TO PLL-\n");
-      loc.rotateZto(180);
+      loc.rotateZto(181);
 
       // 12) Move to PLL
       Serial.print("12) -MOVING TO PLL Y-\n");
-      loc.moveYfor(400, 120, true);
+      loc.moveYfor(485, 120, true);
 
       // 13) Lower Case
       Serial.print("13) -LOWERING CASE-\n");
