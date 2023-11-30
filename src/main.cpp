@@ -1,4 +1,4 @@
-//// Constants
+/// Constants
 #include <AbleButtons.h>
 #include <Arduino.h>
 #include <NewPing.h>
