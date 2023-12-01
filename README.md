@@ -14,3 +14,6 @@ The code requires a very specific set of hardware constructed for the purpose of
 ![Image of the device this code runs on](https://gcdnb.pbrd.co/images/toACYMVNOHfo.png?o=1)
 
 Copyright © 2023, Baylor Engineering Solutions (BES)
+***
+
+The name CChannel comes from an inside joke where we recieved a weird "C" of V-Rail instead of what we actually ordered
