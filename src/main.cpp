@@ -1,3 +1,16 @@
+/*
+CChannelArduino Project
+https://github.com/BaylorRice/CChannelArduinoProject
+
+By: Reese Ford, Samuel Simonian, Johnathan Bonilla
+Created: 10/24/2023
+Updated: 12/01/2023
+
+For Baylor University Course EGR 3380 (Junior Design) - Fall 2023
+
+For use with an Arduino Mega
+*/
+
 /// Constants
 #include <AbleButtons.h>
 #include <Arduino.h>
