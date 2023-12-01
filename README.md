@@ -12,3 +12,5 @@ The code requires a very specific set of hardware constructed for the purpose of
 
 ## The Device (approx CAD)
 ![Image of the device this code runs on](https://gcdnb.pbrd.co/images/toACYMVNOHfo.png?o=1)
+
+Copyright © 2023, BES Solutions
