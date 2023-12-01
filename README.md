@@ -16,4 +16,4 @@ The code requires a very specific set of hardware constructed for the purpose of
 Copyright © 2023, Baylor Engineering Solutions (BES)
 ***
 
-The name CChannel comes from an inside joke where we recieved a weird "C" of V-Rail instead of what we actually ordered
+The name CChannel comes from an inside joke where we recieved a weird ["C" of V-Rail](https://pasteboard.co/OwPPk2CprXwo.jpg) instead of what we actually ordered
