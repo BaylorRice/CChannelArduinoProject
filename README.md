@@ -9,3 +9,6 @@ This program drives a Transfer Subsystem for the Junior Design 2023 Project wher
 
 ## How can I run this code
 The code requires a very specific set of hardware constructed for the purpose of this project, which is almost impossible to replicate, for better or for worse...
+
+## The Device (approx CAD)
+[](https://pasteboard.co/toACYMVNOHfo.png)
