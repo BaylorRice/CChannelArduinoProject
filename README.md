@@ -1,5 +1,6 @@
 # CChannel Arduino Project
-### By: Reese Ford, Samuel Simonian, and Johnathan Bonilla
+### Program By: Reese Ford, Samuel Simonian, and Johnathan Bonilla
+### Hardware By: Liam Stewart, Zoe Pillai, Rose Tidwell
 Created: 10/24/2023\
 Last Updated: 12/01/2023\
 Created for Baylor University Course EGR 3380 (Junior Design) - Fall 2023
