@@ -11,8 +11,9 @@ This program drives a Transfer Subsystem for the Junior Design 2023 Project wher
 ## How can I run this code
 The code requires a very specific set of hardware constructed for the purpose of this project, which is almost impossible to replicate, for better or for worse...
 
-## The Device (approx CAD)
-![Image of the device this code runs on](https://gcdnb.pbrd.co/images/toACYMVNOHfo.png?o=1)
+## The Device
+![Image of the device this code runs on](<img width="771" alt="image" src="https://github.com/BaylorRice/CChannelArduinoProject/assets/87844576/28a9e43e-867d-468b-88c7-6c5052efd133">)
+
 
 Copyright © 2023, Baylor Engineering Solutions (BES)
 ***
